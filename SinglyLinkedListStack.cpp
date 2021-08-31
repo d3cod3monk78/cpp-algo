@@ -1,21 +1,33 @@
 #include <bits/stdc++.h>
-#include <exception>
-#include <string>
 
-class EmptyListException : public std::exception {
+class ExceptionMessage : public std::exception {
+public:
+	virtual std::string getMessage() const = 0;
+};
+
+class Exceptions : public ExceptionMessage {
 private:
 	std::string message;
 
 public:
-	EmptyListException(const std::string& err) {
-		message = err;
-	}
-	~EmptyListException() {}
-	std::string getMessage() const { return message; }
+	Exceptions(const std::string& err) { this->message = err; }
+	virtual ~Exceptions() {  }
+	std::string getMessage() const override { return this->message; }
+};
+
+class EmptyListException : public Exceptions {
+public:
+	EmptyListException(const std::string& err) : Exceptions(err) {}
+};
+
+class EmptyStackException : public Exceptions {
+public:
+	EmptyStackException(const std::string& err) : Exceptions(err) {}
 };
 
 template <typename E> class Node;
 template <typename E> class SinglyLinkedList;
+template <typename E> class SinglyLinkedListStack;
 
 template <typename E> class Node {
 	E element;
@@ -25,9 +37,9 @@ template <typename E> class Node {
 
 template <typename E> class SinglyLinkedList {
 private:
+	int entries;
 	Node<E>* head;
 	Node<E>* tail;
-	int entries;
 
 public:
 	SinglyLinkedList();
@@ -57,7 +69,7 @@ template <typename E> bool SinglyLinkedList<E>::isEmpty() const { return this->e
 
 template <typename E> const E& SinglyLinkedList<E>::first() const {
 	if(this->isEmpty())
-		throw EmptyListException("The list is empty!");
+		throw EmptyListException("The list is empty");
 
 	return this->head->element;
 }
@@ -86,7 +98,6 @@ template <typename E> void SinglyLinkedList<E>::addLast(const E& element) {
 		temp->element = element;
 		temp->next = nullptr;
 		this->tail->next = temp;
-		this->tail = temp;
 		this->entries++;
 	}
 }
@@ -102,29 +113,63 @@ template <typename E> void SinglyLinkedList<E>::removeFirst() {
 	delete temp;
 }
 
+template <typename E> class SinglyLinkedListStack {
+private:
+	SinglyLinkedList<E>* Stack;
+
+public:
+	SinglyLinkedListStack();
+	~SinglyLinkedListStack();
+	int size() const;
+	bool isEmpty() const;
+	const E& top() const;
+	void pop();
+	void push(const E& element);
+};
+
+template <typename E> SinglyLinkedListStack<E>::SinglyLinkedListStack() {
+	this->Stack = new SinglyLinkedList<E>();
+}
+
+template <typename E> SinglyLinkedListStack<E>::~SinglyLinkedListStack() {
+	delete Stack;
+}
+
+template <typename E> int SinglyLinkedListStack<E>::size() const { return this->Stack->size(); }
+template <typename E> bool SinglyLinkedListStack<E>::isEmpty() const { return this->Stack->isEmpty(); }
+template <typename E> const E& SinglyLinkedListStack<E>::top() const { return this->Stack->first(); }
+template <typename E> void SinglyLinkedListStack<E>::pop() {
+	if(this->isEmpty())
+		throw EmptyStackException("The stack is empty");
+
+	return this->Stack->removeFirst();
+}
+
+template <typename E> void SinglyLinkedListStack<E>::push(const E& element) {
+	this->Stack->addFirst(element);
+}
+
 int main(int argc, char const *argv[]) {
-	
-	try {
-		SinglyLinkedList<int>* S = new SinglyLinkedList<int>();
-		
-		for(auto i = 0; i < 10; i++) {
-			S->addFirst(i + 1);
-		}
+	try{
+		SinglyLinkedListStack<int>* arr = new SinglyLinkedListStack<int>();
 
-		std::cout << S->first() << std::endl;
-		std::cout << S->last() << std::endl;
+		for(auto i = 0; i < 10l; i++)
+			arr->push( i + 1);
 
-		for(auto i = 0; i < 5; i++) {
-			S->removeFirst();
-		}
+		std::cout << arr->top() << std::endl;
 
-		std::cout << S->first() << std::endl;
-		std::cout << S->last() << std::endl;
+		arr->pop();
+		arr->pop();
+		arr->pop();
 
+		std::cout << arr->top() << std::endl;
 	}
 	catch(const EmptyListException& e) {
 		std::cout << e.getMessage() << std::endl;
-	} 
+	}
+	catch(const EmptyStackException& e) {
+		std::cout << e.getMessage() << std::endl;
+	}
 
 	return 0;
 }

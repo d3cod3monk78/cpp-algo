@@ -11,5 +11,8 @@ Main.o: Main.cpp
 Log.o: Log.cpp
 	g++ -Wall -c Log.cpp -std=c++17
 
+just:
+	g++ -Wall -o test Main.cpp -std=c++17
+
 clean:
 	rm *.o test

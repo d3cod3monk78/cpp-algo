@@ -17,7 +17,7 @@ public:
 
 	public:
 		~Iterator();
-		const E& operator*() const;
+		const E& operator*();
 		bool operator==(const Iterator& p) const;
 		bool operator!=(const Iterator& p) const;
 		Iterator& operator++();
@@ -53,7 +53,7 @@ template <typename E> Sequence<E>::Iterator::Iterator(Node* u) {
 
 template <typename E> Sequence<E>::Iterator::~Iterator() {}
 
-template <typename E> const E& Sequence<E>::Iterator::operator*() const {
+template <typename E> const E& Sequence<E>::Iterator::operator*() {
 	return this->v->element;
 }
 
@@ -74,7 +74,6 @@ template <typename E> typename Sequence<E>::Iterator& Sequence<E>::Iterator::ope
 	this->v = this->v->prev;
 	return *this;
 }
-
 
 template <typename E> Sequence<E>::Sequence() {
 	this->header = new Node();
@@ -107,15 +106,15 @@ template <typename E> void Sequence<E>::insertBack(const E& element) {
 	this->insert(this->end() , element);
 }
 
-template <typename E> void Sequence<E>::insert(const Iterator& p , const E& element) {
+template <typename E> void  Sequence<E>::insert(const Iterator& p , const E& element) {
 	Node* successor = p.v;
 	Node* predecessor = successor->prev;
 	Node* temp = new Node();
 	temp->element = element;
 	temp->next = successor;
 	successor->prev = temp;
-	predecessor->next = temp;
 	temp->prev = predecessor;
+	predecessor->next = temp;
 	this->entries++;
 }
 
@@ -128,10 +127,11 @@ template <typename E> void Sequence<E>::eraseBack() {
 }
 
 template <typename E> void Sequence<E>::erase(const Iterator& p) {
-	if(this->isEmpty()) return;
 	Node* temp = p.v;
 	Node* predecessor = temp->prev;
 	Node* successor = temp->next;
+	predecessor->next = successor;
+	successor->prev = predecessor;
 	this->entries--;
 	delete temp;
 }
@@ -148,9 +148,9 @@ template <typename E> typename Sequence<E>::Iterator Sequence<E>::atIndex(int in
 
 template <typename E> int Sequence<E>::indexOf(const Iterator& p) const {
 	Iterator ptr = this->begin();
-	int pos = 0;
+	auto pos = 0;
 
-	while(ptr != p) {
+	while(ptr != this->end()) {
 		++ptr;
 		pos++;
 	}
@@ -158,20 +158,72 @@ template <typename E> int Sequence<E>::indexOf(const Iterator& p) const {
 	return pos;
 }
 
+void bubbleSortMethodI(Sequence<int>* arr) {
+	for(auto i = 0; i < arr->size(); i++) {
+
+		bool isSwaped = false;
+
+		for(auto j = 1; j < arr->size() - i; j++) {
+			Sequence<int>::Iterator predecessor = arr->atIndex(j - 1);
+			Sequence<int>::Iterator successor = arr->atIndex(j);
+
+			if(*predecessor > *successor) {
+				int temp = *predecessor;
+				*predecessor = *successor; //Error
+				*successor = temp; //Error
+				// These errors are occured because of the operator overloading of * at line number 56
+			}
+		}
+
+		if(!isSwaped) {
+			return;
+		}
+	}
+}
+
+void bubbleSortMethodII(Sequence<int>* arr) {
+	for(auto i = 0; i < arr->size(); i++) {
+
+		bool isSwaped = false;
+		Sequence<int>::Iterator predecessor = arr->begin();
+
+		for(auto j = 1; j < arr->size() - i; j++) {
+			Sequence<int>::Iterator successor = predecessor;
+			++successor;
+
+			if(*predecessor > *successor) {
+				int temp = *predecessor;
+				*predecessor = *successor; //Error
+				*successor = temp; //Error
+				// These errors are occured because of the operator overloading of * at line number 56
+			}
+
+			++predecessor;
+		}
+
+		if(!isSwaped) {
+			return;
+		}
+	}
+}
+
 int main(int argc, char const *argv[]) {
+	int temp[10] = { 5 , 3 , 9 , 1 , 4 , 10 , 2 , 8 , 6 , 7 };
+
 	Sequence<int>* arr = new Sequence<int>();
 
 	for(auto i = 0; i < 10; i++) {
-		arr->insertFront(i + 1);
+		arr->insertFront(temp[i]);
 	}
+
+	bubbleSortMethodI(arr);
 
 	Sequence<int>::Iterator ptr = arr->begin();
 
 	while(ptr != arr->end()) {
-		auto index = arr->indexOf(ptr);
-		std::cout << "arr[" << index << "]: " << *(arr->atIndex(index)) << std::endl;
-		++ptr;
+		std::cout << *ptr << std::endl;
 	}
+
 
 	return 0;
 }

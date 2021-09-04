@@ -2087,9 +2087,8 @@ int main(int argc, char const *argv[]) {
 
 class Entity {
 public:
-	virtual std::string getName() {
-		return "Entity";
-	}
+	//pure virtual function
+	virtual std::string getName() = 0;
 };
 
 class Player : public Entity {

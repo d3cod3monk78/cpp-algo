@@ -2,35 +2,26 @@
 #include <string>
 
 class Entity {
-public:
-	//pure virtual function
-	virtual std::string getName() = 0;
+   public:
+    // pure virtual function
+    virtual std::string getName() = 0;
 };
 
 class Player : public Entity {
-private:
-	std::string m_Name;
+   private:
+    std::string m_Name;
 
-public:
-	Player(const std::string& name) : m_Name(name) {
+   public:
+    Player(const std::string& name) : m_Name(name) {}
 
-	}
-
-	std::string getName() override { return this->m_Name; }
+    std::string getName() override { return this->m_Name; }
 };
 
-void printName(Entity* ptr) {
-	std::cout << ptr->getName() << std::endl;
-}
+void printName(Entity* ptr) { std::cout << ptr->getName() << std::endl; }
 
-int main(int argc, char const *argv[]) {
-	
-	Entity* e = new Entity();
-	printName(e);
+int main(int argc, char const* argv[]) {
+    Player* p = new Player("d3cod3monk");
+    printName(p);
 
-	Player* p = new Player("d3cod3monk");
-	printName(p);
-
-
-	return 0;
+    return 0;
 }

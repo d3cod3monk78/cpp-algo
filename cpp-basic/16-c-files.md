@@ -11,7 +11,7 @@ It can be a keyboard , it can be a display screen, it can be a printer , it can 
 When dealing with files, there are two types of files you should know about:
 
 - Text files
-- Binary files
+- Binary filesa
 
 ### Text files
 
@@ -61,21 +61,21 @@ There are three types of standard streams.
 
 ## File System Operations
 
-| Operation | Process|
-|-----------|--------|
-|`fopen()`  | Opens a file|
-|`fclose()` | Closes a file|
-|`fputc()`  | Writes a character to a file|
-|`fgetc()`  | Reads a character from a file|
-|`fgets()`  | Reads a string from a file|
-|`fputs()`  | Writes a string to a file|
-|`fseek()`  | Seeks to a specified byte in a file|
-|`fprintf()`| Is to a file what `printf()` is to the console|
-|`fscanf()` | Is to a file what `scanf()` is to the console|
-|`feof()`   | Returns true if end-of-file is reached|
-|`remove()` | Erase a file|
-|`fflush()` | Flushes a file|
-|`rewind()` | Resets the file position indicator to the beginning of th file|
+| Operation   | Process                                                        |
+| ----------- | -------------------------------------------------------------- |
+| `fopen()`   | Opens a file                                                   |
+| `fclose()`  | Closes a file                                                  |
+| `fputc()`   | Writes a character to a file                                   |
+| `fgetc()`   | Reads a character from a file                                  |
+| `fgets()`   | Reads a string from a file                                     |
+| `fputs()`   | Writes a string to a file                                      |
+| `fseek()`   | Seeks to a specified byte in a file                            |
+| `fprintf()` | Is to a file what `printf()` is to the console                 |
+| `fscanf()`  | Is to a file what `scanf()` is to the console                  |
+| `feof()`    | Returns true if end-of-file is reached                         |
+| `remove()`  | Erase a file                                                   |
+| `fflush()`  | Flushes a file                                                 |
+| `rewind()`  | Resets the file position indicator to the beginning of the file |
 
 > You de-associate a file from a specific stream with close operation. If you close a file opened for output, the contents, if any, of its associated streams are written to the external device. This process is generally referred to as _flushing_ the stream, and guarantees that no information is accidentally left in the disk buffer.
 
@@ -87,20 +87,20 @@ There are three types of standard streams.
 
 - __File opening modes in C__
 
-|Mode  | Meaning  |
-|------|----------|
-|__r__     | Opens a text file for reading|
-|__w__     | Opens a text file for writing|
-|__a__     | Append to a text file|
-|__rb__    | Opens a binary file for reading|
-|__wb__    | Opens a binary file for writing|
-|__ab__     | Append to a binary file|
-|__r+__     | Opens a text file for read/write|
-|__w+__     | Opens a text file for read/write|
-|__a+__     | Append or create a text file for read/write|
-|__rb+__    | Opens a binary file for read/write|
-|__wb+__    | Opens a binary file for read/write|
-|__ab+__     | Append or create a binary file for read/write|
+| Mode    | Meaning                                       |
+| ------- | --------------------------------------------- |
+| __r__   | Opens a text file for reading                 |
+| __w__   | Opens a text file for writing                 |
+| __a__   | Append to a text file                         |
+| __rb__  | Opens a binary file for reading               |
+| __wb__  | Opens a binary file for writing               |
+| __ab__  | Append to a binary file                       |
+| __r+__  | Opens a text file for read/write              |
+| __w+__  | Opens a text file for read/write              |
+| __a+__  | Append or create a text file for read/write   |
+| __rb+__ | Opens a binary file for read/write            |
+| __wb+__ | Opens a binary file for read/write            |
+| __ab+__ | Append or create a binary file for read/write |
 
 ```c
 FILE* fp;

@@ -11,8 +11,8 @@ int main(int argc, char const *argv[]){
 
 	char* s;
 
-	while(!feof(f)) {
-		fputs(s , f);
+	while((s = fgets())) {
+		
 	}
 
 	fclose(f);

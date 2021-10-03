@@ -134,6 +134,7 @@ template <typename E> void Sequence<E>::erase(const Iterator& p) {
 	successor->prev = predecessor;
 	this->entries--;
 	delete temp;
+
 }
 
 template <typename E> typename Sequence<E>::Iterator Sequence<E>::atIndex(int index) const {

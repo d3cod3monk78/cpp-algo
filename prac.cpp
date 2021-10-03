@@ -1,2120 +1,1796 @@
-// Insertion Sort
-/*#include <bits/stdc++.h>
-void insertionSort(int arr[] , int n) {
-	for(auto i = 1; i < n; i++) {
-		auto current = arr[i];
-		auto j = i - 1;
-
-		while(j >= 0 && current < arr[j]) {
-			arr[j + 1] = arr[j];
-			j--;
-		}
-
-		arr[j + 1] = current;
-
-		for(auto k = 0; k < 10; k++) {
-			std::cout << arr[k] << " ";
-		}
-		std::cout << std::endl;
-	}
-}
-
-int main(int argc, char const *argv[]) {
-	int arr[10] = { 4 , 9 , 1 , 7 , 3 , 8 , 2 , 0 , 5 , 6 };
-	insertionSort(arr , 10);
-
-	for(auto i = 0; i < 10; i++) {
-		std::cout << arr[i] << std::endl;
-	}
-	return 0;
-}*/
-
-// selection Sort
-/*#include <bits/stdc++.h>
-void selectionSort(int arr[] , int n) {
-	for(auto i = 0; i < n-1; i++) {
-		auto minPos = i;
-
-		for(auto j = i + 1; j < n; j++) {
-			if(arr[j] < arr[minPos]) {
-				minPos = j;
-			}
-		}
-
-		if(minPos != i) {
-			auto temp = arr[i];
-			arr[i] = arr[minPos];
-			arr[minPos] = temp;
-		}
-
-		for(auto k = 0; k < 10; k++) {
-			std::cout << arr[k] << " ";
-		}
-		std::cout << std::endl;
-	}
-}
-
-int main(int argc, char const *argv[]) {
-	int arr[10] = { 4 , 9 , 1 , 7 , 3 , 8 , 2 , 0 , 5 , 6 };
-	selectionSort(arr , 10);
-	return 0;
-}*/
-
-//BubbleSort
-/*#include <bits/stdc++.h>
-void bubbleSort(int arr[] , int n) {
-	for(auto i = 0; i < n - 1; i++) {
-		bool isSwaped = false;
-
-		for(auto j = 0; j < n - i - 1; j++) {
-			if(arr[j] > arr[j + 1]) {
-				auto temp = arr[j];
-				arr[j] = arr[j + 1];
-				arr[j + 1] = temp;
-				isSwaped = true;
-			}
-			for(auto k = 0; k < 10; k++) {
-				std::cout << arr[k] << " ";
-			}
-			std::cout << std::endl;
-		}
-
-		for(auto k = 0; k < 10; k++) {
-			std::cout << arr[k] << " ";
-		}
-		std::cout << std::endl;
-		std::cout << std::endl;
-
-		if(!isSwaped) {
-			break;
-		}
-	}
-}
-
-int main(int argc, char const *argv[]) {
-	int arr[10] = { 4 , 9 , 1 , 7 , 3 , 8 , 2 , 0 , 5 , 6 };
-	for(auto k = 0; k < 10; k++) {
-			std::cout << arr[k] << " ";
-		}
-		std::cout << std::endl;
-		std::cout << std::endl;
-	bubbleSort(arr , 10);
-	return 0;
-}*/
-
-/*#include <bits/stdc++.h>
-#include <exception>
+// Pattern Matching Algorithm
+/*#include <iostream>
+#include <vector>
 #include <string>
 
-class EmptyListException : public std::exception {
-private:
-	std::string message;
-
-public:
-	EmptyListException(const std::string& err) {
-		message = err;
-	}
-	~EmptyListException() {}
-	std::string getMessage() const { return message; }
-};
-
 template <typename E> class Node;
-template <typename E> class SinglyLinkedList;
+template <typename E> class Stack;
 
 template <typename E> class Node {
-	E element;
-	Node<E>* next;
-	friend class SinglyLinkedList<E>;
+    Node<E>* next;
+    E element;
+    friend class Stack<E>;
 };
 
-template <typename E> class SinglyLinkedList {
+template <typename E> class Stack {
 private:
-	Node<E>* head;
-	Node<E>* tail;
-	int entries;
+    Node<E>* head;
+    Node<E>* tail;
+    int entries;
 
 public:
-	SinglyLinkedList();
-	~SinglyLinkedList();
-	int size() const;
-	bool isEmpty() const;
-	const E& first() const;
-	const E& last() const;
-	void addFirst(const E& element);
-	void addLast(const E& element);
-	void removeFirst();
+    Stack();
+    ~Stack();
+    int size() const;
+    bool isEmpty() const;
+    const E& top() const;
+    const E& back() const;
+    void push(const E& element);
+    void pop();
 };
 
-template <typename E> SinglyLinkedList<E>::SinglyLinkedList() {
-	this->entries = 0;
-	this->head = nullptr;
-	this->tail = nullptr;
+template <typename E> Stack<E>::Stack() {
+    this->entries = 0;
+    this->head = nullptr;
+    this->tail = nullptr;
 }
 
-template <typename E> SinglyLinkedList<E>::~SinglyLinkedList() {
-	while(!this->isEmpty())
-		this->removeFirst();
+template <typename E> Stack<E>::~Stack() {
+    while(!this->isEmpty()) this->pop();
 }
 
-template <typename E> int SinglyLinkedList<E>::size() const { return this->entries; }
-template <typename E> bool SinglyLinkedList<E>::isEmpty() const { return this->entries == 0; }
+template <typename E> int Stack<E>::size() const { return this->entries; }
+template <typename E> bool Stack<E>::isEmpty() const { return this->entries == 0; }
 
-template <typename E> const E& SinglyLinkedList<E>::first() const {
-	if(this->isEmpty())
-		throw EmptyListException("The list is empty!");
+template <typename E> const E& Stack<E>::top() const { return this->head->element; }
+template <typename E> const E& Stack<E>::back() const { return this->tail->element; }
 
-	return this->head->element;
+template <typename E> void Stack<E>::push(const E& element) {
+    Node<E>* temp = new Node<E>();
+    temp->element = element;
+
+    temp->next = this->head;
+    this->head = temp;
+    if(this->isEmpty()) this->tail = this->head;
+    this->entries++;
 }
 
-template <typename E> const E& SinglyLinkedList<E>::last() const {
-	if(this->isEmpty())
-		throw EmptyListException("The list is empty");
-
-	return this->tail->element;
+template <typename E> void Stack<E>::pop() {
+    Node<E>* temp = this->head;
+    this->head = this->head->next;
+    this->entries--;
+    if(this->isEmpty()) this->tail = nullptr;
+    delete temp;
 }
 
-template <typename E> void SinglyLinkedList<E>::addFirst(const E& element) {
-	Node<E>* temp = new Node<E>();
-	temp->element = element;
-	temp->next = this->head;
-	this->head = temp;
-	if(this->isEmpty()) this->tail = this->head;
-	this->entries++;
+char getValidBracket(const char& bracket) {
+    if(bracket == '(') return ')';
+    else if(bracket == '[') return ']';
+    else return '}';
 }
 
-template <typename E> void SinglyLinkedList<E>::addLast(const E& element) {
-	if(this->isEmpty())
-		this->addFirst(element);
-	else {
-		Node<E>* temp = new Node<E>();
-		temp->element = element;
-		temp->next = nullptr;
-		this->tail->next = temp;
-		this->tail = temp;
-		this->entries++;
-	}
-}
+bool isMatch(std::string& pattern) {
+    Stack<char>* arr = new Stack<char>();
 
-template <typename E> void SinglyLinkedList<E>::removeFirst() {
-	if(this->isEmpty())
-		throw EmptyListException("The list is empty");
+    for(auto i = 0; i < (int)pattern.size(); i++) {
+        if((char)pattern[i] == '(' || (char)pattern[i] == '[' || (char)pattern[i] == '{') {
+            arr->push(pattern[i]);
+        }
+        else if((char)pattern[i] == ')' || (char)pattern[i] == ']' || (char)pattern[i] == '}') {
+            if(arr->isEmpty()) return false;
+            if(getValidBracket(arr->top()) != (char)pattern[i]) return false;
+            arr->pop();
+        }
+    }
 
-	Node<E>* temp = this->head;
-	this->head = this->head->next;
-	this->entries--;
-	if(this->isEmpty()) this->tail = nullptr;
-	delete temp;
+    if(arr->isEmpty()) {
+        return true;
+    }
+    return false;
 }
 
 int main(int argc, char const *argv[]) {
-	
-	try {
-		SinglyLinkedList<int>* S = new SinglyLinkedList<int>();
-		
-		for(auto i = 0; i < 10; i++) {
-			S->addFirst(i + 1);
-		}
-
-		std::cout << S->first() << std::endl;
-		std::cout << S->last() << std::endl;
-
-		for(auto i = 0; i < 5; i++) {
-			S->removeFirst();
-		}
-
-		std::cout << S->first() << std::endl;
-		std::cout << S->last() << std::endl;
-
-	}
-	catch(const EmptyListException& e) {
-		std::cout << e.getMessage() << std::endl;
-	} 
-
-	return 0;
+    std::string pattern;
+    getline(std::cin , pattern);
+    std::cout << pattern << std::endl;
+    if(isMatch(pattern)) {
+        std::cout << "Pattern is valid" << std::endl;
+    }
+    else {
+        std::cout << "Pattern is not valid" << std::endl;        
+    }
+    return 0;
 }*/
 
-/*#include <bits/stdc++.h>
+
+/*#include <iostream>
+#include <stack>
 #include <string>
-#include <exception>
 
-class EmptyListException : public std::exception {
-private:
-	std::string message;
+bool isValid(const string& pattern) {
+    std::stack<char>* arr = new std::stack<char>();
 
-public:
-	EmptyListException(const std::string& err) {
-		this->message = err;
-	}
-	~EmptyListException() {}
-	std::string getMessage() const { return this->message; }
-};
+    for(auto i = 0; i < (int)pattern.size(); i++) {
+        if(
+            (char)pattern[i] != '(' 
+            && (char)pattern[i] != ')'
+            && (char)pattern[i] != '['
+            && (char)pattern[i] != ']'
+            && (char)pattern[i] != '{'
+            && (char)pattern[i] != '}') {
+            continue;
+        }
+        else if(
+            (char)pattern[i] == '(' ||
+            (char)pattern[i] == '[' ||
+            (char)pattern[i] == '{'
+            ) {
+            arr->push((char)pattern[i]);
+        }
+        else if(
+            (char)pattern[i] == ')' ||
+            (char)pattern[i] == ']' ||
+            (char)pattern[i] == '}' ||
+            ) {
+            if(arr->empty()) return false;
+            if(
+                ((char)pattern[i] == ')' && arr->top() == '(') ||
+                ((char)pattern[i] == ']' && arr->top() == '[') ||
+                ((char)pattern[i] == '}' && arr->top() == '{') 
+                ) {
+                arr->pop();
+            }
+            else {
+                return false;
+            }
+        }
+    }
 
-template <typename E> class Node;
-template <typename E> class DoublyLinkedList;
-
-template <typename E> class Node {
-	E element;
-	Node<E>* prev;
-	Node<E>* next;
-	friend class DoublyLinkedList<E>;
-};
-
-template <typename E> class DoublyLinkedList {
-private:
-	int entries;
-	Node<E>* header;
-	Node<E>* tailer;
-
-public:
-	DoublyLinkedList();
-	~DoublyLinkedList();
-	int size() const;
-	bool isEmpty() const;
-	const E& first() const;
-	const E& last() const;
-	void addFirst(const E& element);
-	void addLast(const E& element);
-	void addBetween(const E& element , Node<E>* predecessor , Node<E>* successor);
-	void removeFirst();
-	void removeLast();
-	void removeBetween(Node<E>* p);
-};
-
-template <typename E> DoublyLinkedList<E>::DoublyLinkedList() {
-	this->entries = 0;
-	this->header = new Node<E>();
-	this->tailer = new Node<E>();
-	this->header->next = this->tailer;
-	this->tailer->prev = this->header;
+    if(arr->empty()) return true;
+    return false;
 }
 
-template <typename E> DoublyLinkedList<E>::~DoublyLinkedList() {
-	while(!this->isEmpty())
-		this->removeFirst();
-}
-
-template <typename E> int DoublyLinkedList<E>::size() const { return this->entries; }
-template <typename E> bool DoublyLinkedList<E>::isEmpty() const { return this->entries == 0; }
-
-template <typename E> const E& DoublyLinkedList<E>::first() const {
-	if(this->isEmpty())
-		throw EmptyListException("The list is empty");
-
-	return this->header->next->element;
-}
-
-template <typename E> const E& DoublyLinkedList<E>::last() const {
-	if(this->isEmpty())
-		throw EmptyListException("The list is empty.");
-	return this->tailer->prev->element;
-}
-
-template <typename E> void DoublyLinkedList<E>::addFirst(const E& element) {
-	this->addBetween(element , this->header , this->header->next);
-}
-
-template <typename E> void DoublyLinkedList<E>::addLast(const E& element) {
-	this->addBetween(element , this->tailer->prev , this->tailer);
-}
-
-template <typename E> void DoublyLinkedList<E>::addBetween(const E& element , Node<E>* predecessor , Node<E>* successor) {
-	Node<E>* temp = new Node<E>();
-	temp->element = element;
-	temp->next = successor;
-	successor->prev = temp;
-	temp->prev = predecessor;
-	predecessor->next = temp;
-	this->entries++;
-}
-
-template <typename E> void DoublyLinkedList<E>::removeFirst() {
-	this->removeBetween(this->header->next);
-}
-
-template <typename E> void DoublyLinkedList<E>::removeLast() {
-	this->removeBetween(this->tailer->prev);
-}
-
-template <typename E> void DoublyLinkedList<E>::removeBetween(Node<E>* p) {
-	if(this->isEmpty())
-		throw EmptyListException("The list is empty");
-
-	Node<E>* predecessor = p->prev;
-	Node<E>* successor = p->next;
-	predecessor->next = successor;
-	successor->prev = predecessor;
-	this->entries--;
-	delete p;
+std::string getPostfix(const std::string& pattern) {
+    
 }
 
 int main(int argc, char const *argv[]) {
-	try {
-		DoublyLinkedList<int>* arr = new DoublyLinkedList<int>();
-		for(auto i = 0; i < 10; i++) {
-			arr->addFirst(i + 1);
-		}
+    
+    std::string pattern;
+    getline(std::cin , pattern);
 
-		std::cout << arr->first() << std::endl;
-		std::cout << arr->last() << std::endl;
+    if(!isValid(pattern)) {
+        std::cout << "This pattern is not valid to solve" << std::endl;
+    }
+    else {
 
-		for(auto i = 0; i < 3; i++) {
-			arr->removeFirst();
-			arr->removeLast();
-		}
+    }
 
-		std::cout << arr->first() << std::endl;
-		std::cout << arr->last() << std::endl;
-	}
-	catch(const EmptyListException& e) {
-		std::cout << e.getMessage() << std::endl;
-	}
-
-	return 0;
+    return 0;
 }*/
 
-/*#include <bits/stdc++.h>
+/*#include <iostream>
+#include <stack>
+#include <string>
 
-class EmptyListException : public std::exception {
-private:
-	std::string message;
 
-public:
-	EmptyListException(const std::string& err) {
-		this->message = err;
-	}
-	~EmptyListException() {}
-	std::string getMessage() const {
-		return this->message;
-	}
-};
+bool checkIsValidExpression(const std::string& pattern) {
+    std::stack<char>* arr = new std::stack<char>();
+    const auto patternSize = (int)pattern.size();
 
-template <typename E> class Node;
-template <typename E> class CircularlyLinkedList;
+    for(auto i = 0; i < patternSize; i++) {
+        if(
+            (char)pattern[i] != '(' &&
+            (char)pattern[i] != ')' &&
+            (char)pattern[i] != '[' &&
+            (char)pattern[i] != ']' &&
+            (char)pattern[i] != '{' &&
+            (char)pattern[i] != '}'
+            ) {
+            continue;
+        }
+        else {
+            if(
+                (char)pattern[i] == '(' ||
+                (char)pattern[i] == '[' ||
+                (char)pattern[i] == '{'
+                ) {
+                arr->push((char)pattern[i]);
+            }
+            else if(
+                (char)pattern[i] == ')' ||
+                (char)pattern[i] == ']' ||
+                (char)pattern[i] == '}'
+                ) {
 
-template <typename E> class Node {
-	E element;
-	Node<E>* next;
-	friend class CircularlyLinkedList<E>;
-};
+                if(arr->empty()) return false;
+                else {
+                    if(
+                        ((char)pattern[i] == ')' && arr->top() == '(') ||
+                        ((char)pattern[i] == ']' && arr->top() == '[') ||
+                        ((char)pattern[i] == '}' && arr->top() == '{')
+                        ) {
+                        arr->pop();
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
 
-template <typename E> class CircularlyLinkedList {
-private:
-	Node<E>* tail;
-	int entries;
+    if(arr->empty()) {
+        return true;
+    }
 
-public:
-	CircularlyLinkedList();
-	~CircularlyLinkedList();
-	int size() const;
-	bool isEmpty() const;
-	const E& first() const;
-	const E& last() const;
-	void addFirst(const E& element);
-	void addLast(const E& element);
-	void removeFirst();
-	void advanced();
-};
-
-template <typename E> CircularlyLinkedList<E>::CircularlyLinkedList() {
-	this->tail = nullptr;
-	this->entries = 0;
+    return false;
 }
 
-template <typename E> CircularlyLinkedList<E>::~CircularlyLinkedList() {
-	while(!this->isEmpty())
-		this->removeFirst();
+int getOperatorPrecedence(const char& op) {
+    if(op == '^') {
+        return 2;
+    }
+    else if(op == '*' || op == '/') {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
-template <typename E> int CircularlyLinkedList<E>::size() const { return this->entries; }
-template <typename E> bool CircularlyLinkedList<E>::isEmpty() const { return this->entries == 0; }
+std::string getPostfixPattern(const std::string& pattern) {
+    std::string postfixPattern;
+    std::stack<char>* operatorArray = new std::stack<char>();
+    const int patternSize = (int)pattern.size();
 
-template <typename E> const E& CircularlyLinkedList<E>::first() const {
-	if(this->isEmpty())
-		throw EmptyListException("The list is empty");
+    for(auto i = 0; i < patternSize; i++) {
+        if(
+            (char)pattern[i] != '(' &&
+            (char)pattern[i] != ')' &&
+            (char)pattern[i] != '[' &&
+            (char)pattern[i] != ']' &&
+            (char)pattern[i] != '{' &&
+            (char)pattern[i] != '}' &&
+            (char)pattern[i] != '^' &&
+            (char)pattern[i] != '*' &&
+            (char)pattern[i] != '/' &&
+            (char)pattern[i] != '+' &&
+            (char)pattern[i] != '-'
+            ) {
+            postfixPattern.push_back((char)pattern[i]);
+        } else {
+            if(
+                (char)pattern[i] == '(' ||
+                (char)pattern[i] == '[' ||
+                (char)pattern[i] == '{'
+                ) {
+                operatorArray->push(pattern[i]);
+            } else if(
+                (char)pattern[i] == ')' ||
+                (char)pattern[i] == ']' ||
+                (char)pattern[i] == '}'
+                ) {
+                while(
+                    operatorArray->top() != '(' &&
+                    operatorArray->top() != '[' &&
+                    operatorArray->top() != '{'
+                    ) {
+                    postfixPattern.push_back(operatorArray->top());
+                    operatorArray->pop();
+                }
+                operatorArray->pop();
+            } else if(
+                operatorArray->empty() ||
+                operatorArray->top() == '(' ||
+                operatorArray->top() == '[' ||
+                operatorArray->top() == '{'
+                ) {
+                operatorArray->push((char)pattern[i]);       
+            } else {
+                if(getOperatorPrecedence((char)pattern[i]) > getOperatorPrecedence(operatorArray->top())) {
+                    operatorArray->push((char)pattern[i]);
+                } else {
+                    if(getOperatorPrecedence((char)pattern[i]) < getOperatorPrecedence(operatorArray->top())) {
+                        while(getOperatorPrecedence((char)pattern[i]) < getOperatorPrecedence(operatorArray->top())) {
+                            postfixPattern.push_back(operatorArray->top());
+                            operatorArray->pop();
+                            if(operatorArray->empty()) {
+                                goto outerLowerPrecedence;
+                            }
+                        }
 
-	return this->tail->next->element;
+                        outerLowerPrecedence:;
+                    } 
+                    if(getOperatorPrecedence((char)pattern[i]) == getOperatorPrecedence(operatorArray->top())) {
+                        while(getOperatorPrecedence((char)pattern[i]) == getOperatorPrecedence(operatorArray->top())) {
+                            postfixPattern.push_back(operatorArray->top());
+                            operatorArray->pop();
+                            if(operatorArray->empty()) {
+                                goto outerSamePrecedence;
+                            }
+                        }
+
+                        outerSamePrecedence:;
+                    }
+
+                    operatorArray->push((char)pattern[i]);
+                }
+            }
+        }
+    }
+
+    while(!operatorArray->empty()) {
+        postfixPattern.push_back(operatorArray->top());
+        operatorArray->pop();
+    }
+
+    return postfixPattern;
 }
 
-template <typename E> const E& CircularlyLinkedList<E>::last() const {
-	if(this->isEmpty())
-		throw EmptyListException("The list is empty");
 
-	return this->tail->element;
-}
-
-template <typename E> void CircularlyLinkedList<E>::addFirst(const E& element) {
-	Node<E>* head = new Node<E>();
-	head->element = element;
-	if(this->isEmpty()) {
-		this->tail = head;
-		this->tail->next = this->tail;
-	}
-	else {
-		head->next = this->tail->next;
-		this->tail->next = head;
-	}
-	this->entries++;
-}
-
-template <typename E> void CircularlyLinkedList<E>::addLast(const E& element) {
-	this->addFirst(element);
-	this->tail = this->tail->next;
-}
-
-template <typename E> void CircularlyLinkedList<E>::removeFirst() {
-	if(this->isEmpty())
-		throw EmptyListException("The list is empty");
-
-	Node<E>* head = this->tail->next;
-	if(head == this->tail) this->tail = nullptr;
-	else this->tail->next = head->next;
-	this->entries--;
-	delete head;
-}
-
-template <typename E> void CircularlyLinkedList<E>::advanced() { this->tail = this->tail->next; }
 
 int main(int argc, char const *argv[]) {
-	CircularlyLinkedList<int>* arr = new CircularlyLinkedList<int>();
+    std::string pattern;
+    getline(std::cin , pattern);
 
-	for(auto i = 0; i < 10; i++) {
-		arr->addFirst(i + 1);
-	}
-
-	std::cout << arr->first() << std::endl;
-	std::cout << arr->last() << std::endl;
-
-	arr->advanced();
-	arr->advanced();
-
-	std::cout << arr->first() << std::endl;
-	std::cout << arr->last() << std::endl;
-
-	arr->removeFirst();
-	arr->removeFirst();
-
-	std::cout << arr->first() << std::endl;
-	std::cout << arr->last() << std::endl;
-	return 0;
+    if(checkIsValidExpression(pattern)) {
+        std::cout << "This expression is a valid expression" << std::endl;
+        std::cout << getPostfixPattern(pattern) << std::endl;
+    }
+    else {
+        std::cout << "This expression is a not valid expression" << std::endl;
+    }
+    return 0;
 }*/
 
-/*#include <bits/stdc++.h>
+/*#include <iostream>
+#include <stack>
+#include <string>
+#include <algorithm>
+#include <fstream>
 
-class StackException : public std::exception {
-public:
-	virtual std::string getMessage() const = 0;
-};
+#define ABS_DIFFERENCE(a , b) ((a) > (b) ? (a) - (b) : (b) - (a))
 
-class StackEmptyException : public StackException {
+class RomanNumberConverter {
 private:
-	std::string message;
-
-public:
-	StackEmptyException(const std::string& err) {
-		this->message = err;
-	}
-	~StackEmptyException() {}
-	std::string getMessage() const override { return message; }
-};
-
-class StackFullException : public StackException {
-private:
-	std::string message;
-
-public:
-	StackFullException(const std::string& err) {
-		this->message = err;
-	}
-	~StackFullException() {}
-	std::string getMessage() const override { return this->message; }
-};
-
-template <typename E> class ArrayStack {
-private:
-	enum { DEF_CAPACITY = 100 };
+    const unsigned char ONE = 'I';
+    const unsigned char FIVE = 'V';
+    const unsigned char TEN = 'X';
+    const unsigned char FIFTY = 'L';
+    const unsigned char HUNDRED = 'C';
+    const unsigned char FIVE_HUNDRED = 'D';
+    const unsigned char THOUSAND = 'M';
 
 private:
-	int capacity;
-	int entries;
-	int tos;
-	E* Stack;
-
-public:
-	ArrayStack(int cap = DEF_CAPACITY);
-	~ArrayStack();
-	int size() const;
-	bool isEmpty() const;
-	const E& top() const;
-	void pop();
-	void push(const E& element);
-};
-
-template <typename E> ArrayStack<E>::ArrayStack(int cap) {
-	this->capacity = cap;
-	this->entries = 0;
-	this->tos = -1;
-	this->Stack = new E[capacity];
-}
-
-template <typename E> ArrayStack<E>::~ArrayStack() { delete [] Stack; }
-
-template <typename E> int ArrayStack<E>::size() const { return this->entries; }
-template <typename E> bool ArrayStack<E>::isEmpty() const { return this->entries == 0; }
-
-template <typename E> const E& ArrayStack<E>::top() const {
-	if(this->isEmpty())
-		throw StackEmptyException("Stack is empty");
-
-	return this->Stack[tos];
-}
-
-template <typename E> void ArrayStack<E>::pop() {
-	if(this->isEmpty())
-		throw StackEmptyException("The stack is empty");
-
-	tos--;
-}
-
-template <typename E> void ArrayStack<E>::push(const E& element) {
-	if(this->tos == this->capacity - 1)
-		throw StackFullException("Stack is full");
-
-	Stack[++tos] = element;
-	this->entries++;
-}
-
-int main(int argc, char const *argv[]) {
-	ArrayStack<int>* arr = new ArrayStack<int>(20);
-
-	for(auto i = 0; i < 10; i++) {
-		arr->push(i + 1);
-	}
-
-	for(auto i = 0; i < 10; i++) {
-		std::cout << arr->top() << std::endl;
-		arr->pop();
-	}
-	return 0;
-}*/
-
-/*#include <bits/stdc++.h>
-
-class ExceptionMessage : public std::exception {
-public:
-	virtual std::string getMessage() const = 0;
-};
-
-class Exceptions : public ExceptionMessage {
-private:
-	std::string message;
-
-public:
-	Exceptions(const std::string& err) { this->message = err; }
-	virtual ~Exceptions() {  }
-	std::string getMessage() const override { return this->message; }
-};
-
-class EmptyListException : public Exceptions {
-public:
-	EmptyListException(const std::string& err) : Exceptions(err) {}
-};
-
-class EmptyStackException : public Exceptions {
-public:
-	EmptyStackException(const std::string& err) : Exceptions(err) {}
-};
-
-template <typename E> class Node;
-template <typename E> class SinglyLinkedList;
-template <typename E> class SinglyLinkedListStack;
-
-template <typename E> class Node {
-	E element;
-	Node<E>* next;
-	friend class SinglyLinkedList<E>;
-};
-
-template <typename E> class SinglyLinkedList {
-private:
-	int entries;
-	Node<E>* head;
-	Node<E>* tail;
-
-public:
-	SinglyLinkedList();
-	~SinglyLinkedList();
-	int size() const;
-	bool isEmpty() const;
-	const E& first() const;
-	const E& last() const;
-	void addFirst(const E& element);
-	void addLast(const E& element);
-	void removeFirst();
-};
-
-template <typename E> SinglyLinkedList<E>::SinglyLinkedList() {
-	this->entries = 0;
-	this->head = nullptr;
-	this->tail = nullptr;
-}
-
-template <typename E> SinglyLinkedList<E>::~SinglyLinkedList() {
-	while(!this->isEmpty())
-		this->removeFirst();
-}
-
-template <typename E> int SinglyLinkedList<E>::size() const { return this->entries; }
-template <typename E> bool SinglyLinkedList<E>::isEmpty() const { return this->entries == 0; }
-
-template <typename E> const E& SinglyLinkedList<E>::first() const {
-	if(this->isEmpty())
-		throw EmptyListException("The list is empty");
-
-	return this->head->element;
-}
-
-template <typename E> const E& SinglyLinkedList<E>::last() const {
-	if(this->isEmpty())
-		throw EmptyListException("The list is empty");
-
-	return this->tail->element;
-}
-
-template <typename E> void SinglyLinkedList<E>::addFirst(const E& element) {
-	Node<E>* temp = new Node<E>();
-	temp->element = element;
-	temp->next = this->head;
-	this->head = temp;
-	if(this->isEmpty()) this->tail = this->head;
-	this->entries++;
-}
-
-template <typename E> void SinglyLinkedList<E>::addLast(const E& element) {
-	if(this->isEmpty())
-		this->addFirst(element);
-	else {
-		Node<E>* temp = new Node<E>();
-		temp->element = element;
-		temp->next = nullptr;
-		this->tail->next = temp;
-		this->entries++;
-	}
-}
-
-template <typename E> void SinglyLinkedList<E>::removeFirst() {
-	if(this->isEmpty())
-		throw EmptyListException("The list is empty");
-
-	Node<E>* temp = this->head;
-	this->head = this->head->next;
-	this->entries--;
-	if(this->isEmpty()) this->tail = nullptr;
-	delete temp;
-}
-
-template <typename E> class SinglyLinkedListStack {
-private:
-	SinglyLinkedList<E>* Stack;
-
-public:
-	SinglyLinkedListStack();
-	~SinglyLinkedListStack();
-	int size() const;
-	bool isEmpty() const;
-	const E& top() const;
-	void pop();
-	void push(const E& element);
-};
-
-template <typename E> SinglyLinkedListStack<E>::SinglyLinkedListStack() {
-	this->Stack = new SinglyLinkedList<E>();
-}
-
-template <typename E> SinglyLinkedListStack<E>::~SinglyLinkedListStack() {
-	delete Stack;
-}
-
-template <typename E> int SinglyLinkedListStack<E>::size() const { return this->Stack->size(); }
-template <typename E> bool SinglyLinkedListStack<E>::isEmpty() const { return this->Stack->isEmpty(); }
-template <typename E> const E& SinglyLinkedListStack<E>::top() const { return this->Stack->first(); }
-template <typename E> void SinglyLinkedListStack<E>::pop() {
-	if(this->isEmpty())
-		throw EmptyStackException("The stack is empty");
-
-	return this->Stack->removeFirst();
-}
-
-template <typename E> void SinglyLinkedListStack<E>::push(const E& element) {
-	this->Stack->addFirst(element);
-}
-
-int main(int argc, char const *argv[]) {
-	try{
-		SinglyLinkedListStack<int>* arr = new SinglyLinkedListStack<int>();
-
-		for(auto i = 0; i < 10l; i++)
-			arr->push( i + 1);
-
-		std::cout << arr->top() << std::endl;
-
-		arr->pop();
-		arr->pop();
-		arr->pop();
-
-		std::cout << arr->top() << std::endl;
-	}
-	catch(const EmptyListException& e) {
-		std::cout << e.getMessage() << std::endl;
-	}
-	catch(const EmptyStackException& e) {
-		std::cout << e.getMessage() << std::endl;
-	}
-
-	return 0;
-}*/
-
-/*#include <bits/stdc++.h>
-
-class ExceptionMessage : public std::exception {
-	virtual std::string getMessage() const = 0;
-};
-
-class Exceptions : public ExceptionMessage {
-private:
-	std::string message;
-
-public:
-	Exceptions(const std::string& err) {
-		this->message = err;
-	}
-	virtual ~Exceptions() {}
-	std::string getMessage() const override { return this->message; }
-};
-
-class QueueEmptyException : public Exceptions {
-public:
-	QueueEmptyException(const std::string& err) : Exceptions(err) {}
-};
-
-class QueueFullException : public Exceptions {
-public:
-	QueueFullException(const std::string& err) : Exceptions(err) {}
-};
-
-template <typename E> class ArrayQueue {
-private:
-	enum { DEF_CAPACITY = 100 };
+    enum {
+        VALUE_OF_ONE = 1 ,
+        VALUE_OF_FIVE = 5 ,
+        VALUE_OF_TEN = 10 ,
+        VALUE_OF_FIFTY = 50 ,
+        VALUE_OF_HUNDRED = 100 ,
+        VALUE_OF_FIVE_HUNDRED = 500 ,
+        VALUE_OF_THOUSAND = 1000
+    };
 
 private:
-	int f;
-	int r;
-	E* Queue;
-	int capacity;
-	int entries;
+    bool checkIsValidExpression(const std::string& pattern) const;
+    bool checkIsValidLetter(const unsigned char& letter) const;
+    int getValueOfLetter(const unsigned char& letter) const;
+    bool checkIsMatchPairs(const unsigned char& predecessor , const unsigned char& successor) const;
+    int generateResult(std::stack<unsigned char>*& letterStack);
 
 public:
-	ArrayQueue(int cap = DEF_CAPACITY);
-	~ArrayQueue();
-	int size() const;
-	bool isEmpty() const;
-	const E& front() const;
-	void enqueue(const E& element);
-	void dequeue();
+    RomanNumberConverter();
+    ~RomanNumberConverter();
+    void init();
 };
 
-template <typename E> ArrayQueue<E>::ArrayQueue(int cap) {
-	this->capacity = cap;
-	this->f = 0;
-	this->r = 0;
-	this->entries = 0;
-	this->Queue = new E[capacity];
+RomanNumberConverter::RomanNumberConverter() {
+    
 }
 
-template <typename E> ArrayQueue<E>::~ArrayQueue() {
-	delete [] Queue;
+RomanNumberConverter::~RomanNumberConverter() {
 }
 
-template <typename E> int ArrayQueue<E>::size() const { return this->entries; }
-template <typename E> bool ArrayQueue<E>::isEmpty() const { return this->entries == 0; }
-
-template <typename E> const E& ArrayQueue<E>::front() const {
-	if(this->isEmpty())
-		throw QueueEmptyException("The queue is empty");
-
-	return this->Queue[f];
+int RomanNumberConverter::getValueOfLetter(const unsigned char& letter) const {
+    if(letter == ONE) {
+        return VALUE_OF_ONE;
+    } else if(letter == FIVE) {
+        return VALUE_OF_FIVE;
+    }
+    else if(letter == TEN) {
+        return VALUE_OF_TEN;
+    }
+    else if(letter == FIFTY) {
+        return VALUE_OF_FIFTY;
+    }
+    else if(letter == HUNDRED) {
+        return VALUE_OF_HUNDRED;
+    }
+    else if(letter == FIVE_HUNDRED) {
+        return VALUE_OF_FIVE_HUNDRED;
+    }
+    else {
+        return VALUE_OF_THOUSAND;
+    }
 }
 
-template <typename E> void ArrayQueue<E>::enqueue(const E& element) {
-	if(this->r == this->capacity) throw QueueFullException("The queue is full");
-
-	Queue[r++] = element;
-	this->entries++;
+bool RomanNumberConverter::checkIsValidLetter(const unsigned char& letter) const {
+    if(
+        letter != this->ONE &&
+        letter != this->FIVE &&
+        letter != this->TEN &&
+        letter != this->FIFTY &&
+        letter != this->HUNDRED &&
+        letter != this->FIVE_HUNDRED &&
+        letter != this->THOUSAND
+        ) {
+        return false;
+    }
+    return true;
 }
 
-template <typename E> void ArrayQueue<E>::dequeue() {
-	if(this->isEmpty()) throw QueueEmptyException("The queue is empty");
+bool RomanNumberConverter::checkIsMatchPairs(const unsigned char& predecessor , const unsigned char& successor) const {
+    if(predecessor == ONE) {
+        if(successor == FIVE || successor == TEN) {
+            return true;
+        }
+    }
+    else if(predecessor == TEN) {
+        if(successor == FIFTY || successor == HUNDRED) {
+            return true;
+        }
+    }
+    else if(predecessor == HUNDRED) {
+        if(successor == FIVE_HUNDRED || successor == THOUSAND) {
+            return true;
+        }
+    }
 
-	f++;
-	this->entries--;
-	if(this->isEmpty()) {
-		this->f = 0;
-		this->r = 0;
-	}
+    return false;
+}
+
+bool RomanNumberConverter::checkIsValidExpression(const std::string& pattern) const {
+    const auto patternSize = (int)pattern.size();
+
+    for(auto i = 0; i < patternSize - 3; i++) {
+        if(!this->checkIsValidLetter((unsigned char)pattern[i])) {
+            return false;
+        }
+        else {
+            if(
+                (unsigned char)pattern[i] == (unsigned char)pattern[i + 1] && 
+                (unsigned char)pattern[i] == (unsigned char)pattern[i + 2]
+                ) {
+                return false;
+            }
+            else if(
+                getValueOfLetter((unsigned char)pattern[i]) < 
+                getValueOfLetter((unsigned char)pattern[i + 1])
+                ) {
+                if(
+                    getValueOfLetter((unsigned char)pattern[i]) <=
+                    getValueOfLetter((unsigned char)pattern[i + 2])
+                    ) {
+                    return false;
+                } else if(!checkIsMatchPairs(pattern[i] , pattern[i + 1])) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    for(auto i = patternSize - 3; i < patternSize; i++) {
+        if(!this->checkIsValidLetter(pattern[i])) return false;
+    }
+
+    for(auto i = patternSize - 3; i < patternSize - 1; i++) {
+        if(
+            getValueOfLetter((unsigned char)pattern[i]) < 
+            getValueOfLetter((unsigned char)pattern[i + 1])
+            ) {
+             if(!checkIsMatchPairs(pattern[i] , pattern[i + 1])) {
+                return false;
+            }
+        }
+    }
+
+    if(
+        getValueOfLetter((unsigned char)pattern[patternSize - 3]) < 
+        getValueOfLetter((unsigned char)pattern[patternSize - 2])
+        ) {
+        if(
+            getValueOfLetter((unsigned char)pattern[patternSize - 3]) <=
+            getValueOfLetter((unsigned char)pattern[patternSize - 1])
+            ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int RomanNumberConverter::generateResult(std::stack<unsigned char>*& letterStack) {
+    if(letterStack->empty()) {
+        return 0;
+    }
+
+    const int stackSize = (int)letterStack->size();
+    int sum = 0;
+
+    for(auto i = 0; i < stackSize; i++) {
+        if(sum > this->getValueOfLetter(letterStack->top())) {
+            sum = sum - getValueOfLetter(letterStack->top());
+        }
+        else {
+            sum = sum + getValueOfLetter(letterStack->top());
+        }
+        letterStack->pop();
+    }
+
+    return sum;
+}
+
+void RomanNumberConverter::init() {
+    std::fstream file = std::fstream("test.txt" , std::ios::in);
+    std::string pattern;
+
+    if(file.is_open()) {
+        while(std::getline(file , pattern)) {
+            std::string copyPattern;
+            std::stack<unsigned char>* romanNumberStack = new std::stack<unsigned char>();
+            const int patternSize = (int)pattern.size();
+            for(auto i = 0; i < patternSize; i++) {
+                copyPattern.push_back(pattern[i]);
+            }
+            std::transform(pattern.begin() , pattern.end() , pattern.begin() , [](unsigned char letter) {
+                return (unsigned char)std::toupper(letter);
+            });
+
+            if(checkIsValidExpression(pattern)) {
+                for(auto i = 0; i < patternSize; i++) {
+                    romanNumberStack->push(pattern[i]);
+                }
+                int result = generateResult(romanNumberStack);
+                std::cout << copyPattern << " = " << result << std::endl;
+            } else {
+                std::cout << copyPattern << " = error" << std::endl;
+            }
+            delete romanNumberStack;
+        }
+
+    }else {
+        std::cout << "Something went wrong. Please check the file" << std::endl;
+    }
 }
 
 int main(int argc, char const *argv[]) {
-	ArrayQueue<int>* arr = new ArrayQueue<int>(20);
-
-	for(auto i = 0; i < 10; i++){
-		arr->enqueue(i + 1);
-	}
-
-	std::cout << arr->front() << std::endl;
-
-	arr->dequeue();
-	arr->dequeue();
-	arr->dequeue();
-
-	std::cout << arr->front() << std::endl;
-
-	return 0;
+    RomanNumberConverter* program = new RomanNumberConverter();
+    program->init();
+    return 0;
 }*/
 
-/*#include <bits/stdc++.h>
+/*#include <iostream>
+#include <list>
 
-class ExceptionMessage : public std::exception {
-	virtual std::string getMessage() const = 0;
-};
+template <typename E> class BinaryTree {
+protected:
+    class Node {
+    public: 
+        E element;
+        Node* parent;
+        Node* leftChild;
+        Node* rightChild;
+        Node();
+    };
 
-class Exceptions : public ExceptionMessage {
+public:
+    class Position {
+    private:
+        Node* v;
+
+    public:
+        Position(Node* u);
+        ~Position();
+        const E& operator*() const;
+        Position left() const;
+        Position right() const;
+        Position parent() const;
+        bool isRoot() const;
+        bool isExternal() const;
+        friend class BinaryTree<E>;
+    };
+
+public:
+    typedef std::list<Position> PositionList;
+
 private:
-	std::string message;
+    Node* rootNode;
+    int entries;
+
+protected:
+    void preorder(Node* v , PositionList& pl);
 
 public:
-	Exceptions(const std::string& err) {
-		this->message = err;
-	}
-	virtual ~Exceptions() {}
-	std::string getMessage() const override {
-		return this->message;
-	}
+    BinaryTree();
+    ~BinaryTree();
+    int size() const;
+    bool isEmpty() const;
+    Position root() const;
+    PositionList positions() const;
+    void addRoot();
+    void expandExternal(const Position& p);
+    Position removeAboveExternal(const Position& p);
 };
 
-class EmptyListException : public Exceptions {
-public:
-	EmptyListException(const std::string& err) : Exceptions(err) {}
-};
+template <typename E> BinaryTree<E>::Node::Node() {
+    leftChild = nullptr;
+    rightChild = nullptr;
+    parent = nullptr;
+}
 
-class EmptyQueueException : public Exceptions {
-public:
-	EmptyQueueException(const std::string& err) : Exceptions(err) {}
-};
+template <typename E> BinaryTree<E>::Position::Position(Node* u) {
+    this->v = v;
+}
 
-class QueueFullException : public Exceptions {
-public:
-	QueueFullException(const std::string& err) : Exceptions(err) {}
-};
+template <typename E> BinaryTree<E>::Position::~Position() {
+    delete v;
+}
 
-template <typename E> class Node;
-template <typename E> class CircularlyLinkedList;
-template <typename E> class CircularlyLinkedListQueue;
+template <typename E> const E& BinaryTree<E>::Position::operator*() const {
+    return this->v->element;
+}
 
-template <typename E> class Node {
-	E element;
-	Node<E>* next;
-	friend class CircularlyLinkedList<E>;
-};
+template <typename E> Position BinaryTree<E>::Position::left() const {
+    return Position(this->v->leftChild);
+}
 
-template <typename E> class CircularlyLinkedList {
+template <typename E> Position BinaryTree<E>::Position::right() const {
+    return Position(this->v->rightChild);
+}
+
+template <typename E> Position BinaryTree<E>::Position::parent() const {
+    return Position(this->v->parent);
+}
+
+template <typename E> bool BinaryTree<E>::Position::isRoot() const {
+    return this->v->parent == nullptr;
+}
+
+template <typename E> bool BinaryTree<E>::Position::isExternal() const {
+    return this->v->leftChild == nullptr && this->v->rightChild == nullptr;
+}
+
+template <typename E> BinaryTree<E>::BinaryTree() {
+    this->rootNode = nullptr;
+    this->entries = 0;
+}
+
+template <typename E> BinaryTree<E>::~BinaryTree() {
+    
+}
+
+template <typename E> int BinaryTree<E>::size() const {
+    return this->entries;
+}
+
+template <typename E> bool BinaryTree<E>::isEmpty() const {
+    return this->entries == 0;
+}
+
+*/
+
+/*#include <iostream>
+#include <list>
+
+template <typename E , typename C> class PriorityQueue {
 private:
-	int entries;
-	Node<E>* tail;
+    std::list<E>* L;
+    C isLess;
 
 public:
-	CircularlyLinkedList();
-	~CircularlyLinkedList();
-	int size() const;
-	bool isEmpty() const;
-	const E& first() const;
-	const E& last() const;
-	void addFirst(const E& element);
-	void addLast(const E& element);
-	void removeFirst();
-	void advance();
+    PriorityQueue(const C& isLess);
+    ~PriorityQueue();
+    int size() const;
+    bool isEmpty() const;
+    void insert(const E& element);
+    const E& min() const;
+    void removeMin();
 };
 
-template <typename E> CircularlyLinkedList<E>::CircularlyLinkedList() {
-	this->entries = 0;
-	this->tail = nullptr;
+template <typename E , typename C> PriorityQueue<E , C>::PriorityQueue(const C& isLess) {
+    this->isLess = isLess;
+    L = new std::list<E>();
 }
 
-template <typename E> CircularlyLinkedList<E>::~CircularlyLinkedList() {
-	while(!this->isEmpty())
-		this->removeFirst();
+template <typename E , typename C> PriorityQueue<E , C>::~PriorityQueue() {
+    L->clear();
+    delete L;
 }
 
-template <typename E> int CircularlyLinkedList<E>::size() const { return this->entries; }
-template <typename E> bool CircularlyLinkedList<E>::isEmpty() const { return this->entries == 0; }
+template <typename E , typename C> int PriorityQueue<E , C>::size() const { return this->L->size(); }
 
-template <typename E> const E& CircularlyLinkedList<E>::first() const {
-	if(this->isEmpty()) throw EmptyListException("The list is empty");
+template <typename E , typename C> bool PriorityQueue<E , C>::isEmpty() const { return this->L->empty(); }
 
-	return this->tail->next->element;
+template <typename E , typename C> void PriorityQueue<E , C>::insert(const E& element) {
+    typename std::list<E>::iterator p; 
+    p = this->L->begin();
+
+    while(p != this->L->end() && !isLess(element , *p)) {
+        ++p;
+    }
+    L->insert(p , element);
 }
 
-template <typename E> const E& CircularlyLinkedList<E>::last() const {
-	if(this->isEmpty()) throw EmptyListException("The list is empty");
-
-	return this->tail->element;
+template <typename E , typename C> const E& PriorityQueue<E , C>::min() const {
+    return L->front();
 }
 
-template <typename E> void CircularlyLinkedList<E>::addFirst(const E& element) {
-	Node<E>* temp = new Node<E>();
-	temp->element = element;
-	if(this->isEmpty()) {
-		this->tail = temp;
-		this->tail->next = this->tail;
-	}
-	else {
-		temp->next = this->tail->next;
-		this->tail->next = temp;
-	}
-	this->entries++;
-}
+template <typename E , typename C> void PriorityQueue<E , C>::removeMin() { L->pop_front(); }
 
-template <typename E> void CircularlyLinkedList<E>::addLast(const E& element) {
-	this->addFirst(element);
-	this->advance();
-}
-
-template <typename E> void CircularlyLinkedList<E>::removeFirst() {
-	if(this->isEmpty()) throw EmptyListException("The list is empty.");
-
-	Node<E>* head = this->tail->next;
-	if(this->tail == head) this->tail = nullptr;
-	else this->tail->next = head->next;
-	this->entries--;
-	delete head;
-}
-
-template <typename E> void CircularlyLinkedList<E>::advance() {
-	if(this->isEmpty()) throw EmptyListException("The list is empty");
-	this->tail = this->tail->next;
-}
-
-template <typename E> class CircularlyLinkedListQueue {
-private:
-	CircularlyLinkedList<E>* Queue;
-
+class IsLess {
 public:
-	CircularlyLinkedListQueue();
-	~CircularlyLinkedListQueue();
-	int size() const;
-	bool isEmpty() const;
-	const E& front() const;
-	void enqueue(const E& element);
-	void dequeue();
+    bool operator()(int x , int y);
 };
 
-template <typename E> CircularlyLinkedListQueue<E>::CircularlyLinkedListQueue() {
-	this->Queue = new CircularlyLinkedList<E>();
-}
-
-template <typename E> CircularlyLinkedListQueue<E>::~CircularlyLinkedListQueue() {
-	delete this->Queue;
-}
-
-template <typename E> int CircularlyLinkedListQueue<E>::size() const { return this->Queue->size(); }
-template <typename E> bool CircularlyLinkedListQueue<E>::isEmpty() const { return this->Queue->isEmpty(); }
-template <typename E> const E& CircularlyLinkedListQueue<E>::front() const {
-	if(this->isEmpty()) throw EmptyQueueException("The queue is empty");
-	return this->Queue->first();
-}
-
-template <typename E> void CircularlyLinkedListQueue<E>::enqueue(const E& element) {
-	this->Queue->addLast(element);
-}
-
-template <typename E> void CircularlyLinkedListQueue<E>::dequeue() {
-	if(this->isEmpty()) throw EmptyQueueException("The queue is empty");
-	this->Queue->removeFirst();
+bool IsLess::operator()(int x , int y) {
+    return x < y;
 }
 
 int main(int argc, char const *argv[]) {
-	CircularlyLinkedListQueue<int>* arr = new CircularlyLinkedListQueue<int>();
+    IsLess isLess;
+    PriorityQueue<int , IsLess>* queue = new PriorityQueue<int , IsLess>(isLess);
 
-	for(auto i = 0; i < 10; i++) {
-		arr->enqueue(i + 1);
-	}
+    queue->insert(10);
+    queue->insert(1);
+    queue->insert(5);
+    queue->insert(3);
 
-	std::cout << arr->front() << std::endl;
+    std::cout << queue->min() << std::endl;
+    queue->removeMin();
+    std::cout << queue->min() << std::endl;
+    queue->removeMin();
+    std::cout << queue->min() << std::endl;
+    queue->removeMin();
+    delete queue;
 
-	arr->dequeue();
-	arr->dequeue();
-	arr->dequeue();
-
-	std::cout << arr->front() << std::endl;
-
-
-	return 0;
+    return 0;
 }*/
 
-/*#include <bits/stdc++.h>
 
-class ExceptionMessage : std::exception {
-public:
-	virtual std::string getMessage() const = 0;
-};
+/*#include <iostream>
+#include <chrono>
+#include <thread>
 
-class Exceptions : public ExceptionMessage {
-private:
-	std::string message;
-
-public:
-	Exceptions(const std::string& err) {
-		this->message = err;
-	}
-	virtual ~Exceptions() {}
-	std::string getMessage() const override { return this->message; }
-};
-
-class EmptyListException : public Exceptions {
-public:
-	EmptyListException(const std::string& err) : Exceptions(err) {}
-};
-
-class EmptyDeckException : public Exceptions {
-public:
-	EmptyDeckException(const std::string& err) : Exceptions(err) {}
-};
-
-template <typename E> class Node;
-template <typename E> class DoublyLinkedList;
-template <typename E> class Deck;
-
-template <typename E> class Node {
-	E element;
-	Node<E>* prev;
-	Node<E>* next;
-	friend class DoublyLinkedList<E>;
-};
-
-template <typename E> class DoublyLinkedList {
-private:
-	int entries;
-	Node<E>* tailer;
-	Node<E>* header;
-
-public:
-	DoublyLinkedList();
-	~DoublyLinkedList();
-	int size() const;
-	bool isEmpty() const;
-	const E& first() const;
-	const E& last() const;
-	void addFirst(const E& element);
-	void addLast(const E& element);
-	void addBetween(const E& element , Node<E>* predecessor , Node<E>* successor);
-	void removeFirst();
-	void removeLast();
-	void removeBetween(Node<E>* node);
-};
-
-template <typename E> DoublyLinkedList<E>::DoublyLinkedList() {
-	this->entries = 0;
-	this->header = new Node<E>();
-	this->tailer = new Node<E>();
-	this->header->next = this->tailer;
-	this->tailer->prev = this->header;
-}
-
-template <typename E> DoublyLinkedList<E>::~DoublyLinkedList() {
-	while(!this->isEmpty()) this->removeFirst();
-}
-
-template <typename E> int DoublyLinkedList<E>::size() const { return this->entries; }
-template <typename E> bool DoublyLinkedList<E>::isEmpty() const { return this->entries == 0; }
-
-template <typename E> const E& DoublyLinkedList<E>::first() const {
-	if(this->isEmpty()) throw EmptyListException("The list is empty");
-	return this->header->next->element;
-}
-
-template <typename E> const E& DoublyLinkedList<E>::last() const {
-	if(this->isEmpty()) throw EmptyListException("The list is empty");
-	return this->tailer->prev->element;
-}
-
-template <typename E> void DoublyLinkedList<E>::addFirst(const E& element) {
-	this->addBetween(element , this->header , this->header->next);
-}
-
-template <typename E> void DoublyLinkedList<E>::addLast(const E& element) {
-	this->addBetween(element , this->tailer->prev , this->tailer);
-}
-
-template <typename E> void DoublyLinkedList<E>::addBetween(const E& element , Node<E>* predecessor , Node<E>* successor) {
-	Node<E>* node = new Node<E>();
-	node->element = element;
-	predecessor->next = node;
-	node->prev = predecessor;
-	successor->prev = node;
-	node->next = successor;
-	this->entries++;
-}
-
-template <typename E> void DoublyLinkedList<E>::removeFirst() {
-	this->removeBetween(this->header->next);
-}
-
-template <typename E> void DoublyLinkedList<E>::removeLast() {
-	this->removeBetween(this->tailer->prev);
-}
-
-template <typename E> void DoublyLinkedList<E>::removeBetween(Node<E>* node) {
-	if(this->isEmpty()) throw EmptyListException("The list is empty");
-
-	Node<E>* predecessor = node->prev;
-	Node<E>* successor = node->next;
-	predecessor->next = successor;
-	successor->prev = predecessor;
-	this->entries--;
-	delete node;
-}
-
-template <typename E> class DEQueue {
-private:
-	DoublyLinkedList<E>* Deck;
-
-public:
-	DEQueue();
-	~DEQueue();
-	int size() const;
-	bool isEmpty() const;
-	const E& front() const;
-	const E& back() const;
-	void insertFront(const E& element);
-	void insertBack(const E& element);
-	void removeFront();
-	void removeBack();
-};
-
-template <typename E> DEQueue<E>::DEQueue() {
-	this->Deck = new DoublyLinkedList<E>();
-}
-
-template <typename E> DEQueue<E>::~DEQueue() {
-	delete Deck;
-}
-
-template <typename E> int DEQueue<E>::size() const { return this->Deck->size(); }
-template <typename E> bool DEQueue<E>::isEmpty() const { return this->Deck->isEmpty(); }
-template <typename E> const E& DEQueue<E>::front() const {
-	if(this->isEmpty()) throw EmptyDeckException("The Deck is empty");
-	return this->Deck->first();
-}
-
-template <typename E> const E& DEQueue<E>::back() const {
-	if(this->isEmpty()) throw EmptyDeckException("The Deck is empty");
-	return this->Deck->last();
-}
-
-template <typename E> void DEQueue<E>::insertFront(const E& element) { this->Deck->addFirst(element); }
-template <typename E> void DEQueue<E>::insertBack(const E& element) { this->Deck->addLast(element); }
-
-template <typename E> void DEQueue<E>::removeFront() {
-	if(this->isEmpty()) throw EmptyDeckException("The Deck is empty");
-	this->Deck->removeFirst();
-}
-
-template <typename E> void DEQueue<E>::removeBack() {
-	if(this->isEmpty()) throw EmptyDeckException("The Deck is empty");
-	this->Deck->removeLast();
+void run(int x) {
+    while(x --> 0) {
+        std::cout << "Threads: " << x << std::endl;
+    }
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
 int main(int argc, char const *argv[]) {
-	DEQueue<int>* arr = new DEQueue<int>();
-
-	for(auto i = 0; i < 10; i++) {
-		arr->insertFront(i + 1);
-	}
-
-	std::cout << arr->front() << std::endl;
-	std::cout << arr->back() << std::endl;
-
-	arr->removeFront();
-	arr->removeFront();
-	arr->removeBack();
-	arr->removeBack();
-
-	std::cout << arr->front() << std::endl;
-	std::cout << arr->back() << std::endl;
-
-	return 0;
+    std::thread t1(run , 10);
+    if(t1.joinable()) {
+        t1.detach();
+    }
+    std::cout << "After" << std::endl;
+    return 0;
 }*/
 
-/*#include <bits/stdc++.h>
+/*#include <iostream>
+#include <thread>
+#include <mutex>
 
-class ExceptionMessage : public std::exception {
-	virtual std::string getMessage() const = 0;
-};
+std::mutex m;
 
-class Exceptions : public ExceptionMessage {
-private:
-	std::string message;
+int myAccount = 0;
 
-public:
-	Exceptions(const std::string& err) { this->message = err; }
-	virtual ~Exceptions() {}
-	std::string getMessage() const override { return this->message; }
-};
-
-class EmptyVectorException : public Exceptions {
-public:
-	EmptyVectorException(const std::string& err) : Exceptions(err) {}
-};
-
-class VectorFullException : public Exceptions {
-public:
-	VectorFullException(const std::string& err) : Exceptions(err) {}
-};
-
-class OutOfRangeException : public Exceptions {
-public:
-	OutOfRangeException(const std::string& err) : Exceptions(err) {}
-};
-
-template <typename E> class ArrayVector {
-
-private:
-	enum { DEF_CAPACITY = 100 };
-
-private:
-	int entries;
-	E* Vector;
-	int capacity;
-
-public:
-	ArrayVector(int cap = DEF_CAPACITY);
-	~ArrayVector();
-	int size() const;
-	bool isEmpty() const;
-	const E& at(int index) const;
-	void set(const int& index , const E& element); //replace the element at i
-	void insert(const int& index , const E& element);
-	void erase(const int& index);
-};
-
-template <typename E> ArrayVector<E>::ArrayVector(int cap) {
-	this->capacity = cap;
-	this->entries = 0;
-	this->Vector = new E[capacity];
-}
-
-template <typename E> ArrayVector<E>::~ArrayVector() {
-	delete [] Vector;
-}
-
-template <typename E> int ArrayVector<E>::size() const { return this->entries; }
-template <typename E> bool ArrayVector<E>::isEmpty() const { return this->entries == 0; }
-
-template <typename E> const E& ArrayVector<E>::at(int index) const {
-	if(index < 0 || index >= capacity) throw OutOfRangeException("Your index is out of bounds");
-	else if(this->isEmpty()) throw EmptyVectorException("The vector is empty");
-
-	return this->Vector[index];
-}
-
-template <typename E> void ArrayVector<E>::set(const int& index , const E& element) {
-	if(index < 0 || index >= capacity) throw OutOfRangeException("Your index is out of bounds");
-	else if(this->entries == capacity) throw VectorFullException("The vector if full");
-
-	this->Vector[index] = element;
-}
-
-template <typename E> void ArrayVector<E>::insert(const int& index , const E& element) {
-	if(index < 0 || index >= capacity) throw OutOfRangeException("Your index is out of bounds");
-	else if(this->entries == capacity) throw VectorFullException("The vector if full");
-
-	for(auto i = this->entries - 1; i > index - 1; i--) {
-		this->Vector[i + 1] = this->Vector[i];
-	}
-	this->Vector[index] = element;
-	this->entries++;
-}
-
-template <typename E> void ArrayVector<E>::erase(const int& index) {
-	if(index < 0 || index >= capacity) throw OutOfRangeException("Your index is out of bounds");
-	else if(this->isEmpty()) throw EmptyVectorException("The vector is empty");
-
-	for(auto i = index + 1; i < entries; i++) {
-		this->Vector[i - 1] = this->Vector[i];
-	}
-
-	this->entries--;
+void addMoney() {
+    m.lock();
+    myAccount++;
+    m.unlock();
 }
 
 int main(int argc, char const *argv[]) {
-	try {
-		ArrayVector<int>* arr = new ArrayVector<int>(20);
+    std::thread t1(addMoney);
+    std::thread t2(addMoney);
 
-		for(auto i = 0; i < 10; i++) {
-			arr->insert(i , i + 1);
-		}
+    t1.join();
+    t2.join();
 
-		for(auto i = 0; i < arr->size(); i++) {
-			std::cout << arr->at(i) << std::endl;
-		}
-
-		arr->set(5 , 20);
-		arr->erase(1);
-		arr->erase(6);
-		arr->erase(9);
-
-		std::cout << std::endl;
-
-		for(auto i = 0; i < arr->size(); i++) {
-			std::cout << arr->at(i) << std::endl;
-		}
-	}
-	catch(const Exceptions& e) {
-		std::cout << e.getMessage() << std::endl;
-	}
-
-	return 0;
+    std::cout << myAccount << std::endl;
+    return 0;
 }*/
+
+/*#include <iostream>
+#include <thread>
+#include <mutex>
+
+int counter = 0;
+std::mutex m;
+
+void increaseCounter() {
+    for(auto i = 0; i < 1000; i++) {
+        if(m.try_lock()) {
+            counter++;
+            m.unlock();
+        }
+    }
+}
+
+int main(int argc, char const *argv[]) {
+    std::thread t1(increaseCounter);
+    std::thread t2(increaseCounter);
+
+    t1.join();
+    t2.join();
+
+    std::cout << counter << std::endl;
+    return 0;
+}*/
+
+/*#include <iostream>
+#include <iostream>
+
+template <typename E> class BinaryTree {
+protected:
+    class Node {
+    public:
+        E element;
+        Node* parent;
+        Node* leftChild;
+        Node* rightChild;
+        Node();
+    };
+
+public:
+    class Position {
+    private:
+        Node* v;
+
+    public:
+        Position(Node* u);
+        const E& operator*() const;
+        Position left() const;
+        Position right() const;
+        Position parent() const;
+        bool isRoot() const;
+        bool isExternal() const;
+        friend class BinaryTree<E>;
+    };
+
+public:
+    typedef std::list<Position> PositionList;
+
+private:
+    Node* rootNode;
+    int entries;
+
+protected:
+    void preorder(Node* v , PositionList& pl);
+
+public:
+    BinaryTree();
+    int size() const;
+    bool isEmpty() const;
+    Position root() const;
+    PositionList positions() const;
+    void addRoot();
+    void expandExternal(const Position& p);
+    Position removeAboveExternal(const Position& p);
+};
+
+template <typename E> BinaryTree<E>::Node::Node() {
+    this->parent = nullptr;
+    this->leftChild = nullptr;
+    this->rightChild = nullptr;
+}
+
+template <typename E> BinaryTree<E>::Position::Position(Node* u) {
+    this->v = u;
+}
+
+template <typename E> const E& BinaryTree<E>::Position::operator*() const {
+    return this->v->element;
+}
+
+template <typename E> typename BinaryTree<E>::Position BinaryTree<E>::Position::left() const {
+    return Position(this->v->leftChild);
+}
+
+template <typename E> typename BinaryTree<E>::Position BinaryTree<E>::Position::right() const {
+    return Position(this->v->rightChild);
+}
+
+template <typename E> typename BinaryTree<E>::Position BinaryTree<E>::Position::parent() const {
+    return Position(this->v->parent);
+}
+
+template <typename E> bool BinaryTree<E>::Position::isRoot() const {
+    return this->v->parent == nullptr;
+}
+
+template <typename E> bool BinaryTree<E>::Position::isExternal() const {
+    return this->v->leftChild == nullptr && this->v->rightChild == nullptr;
+}
+
+template <typename E> BinaryTree<E>::BinaryTree() {
+    this->rootNode = nullptr;
+    this->entries = 0;
+}
+
+template <typename E> int BinaryTree<E>::size() const { return this->entries; }
+
+template <typename E> bool BinaryTree<E>::isEmpty() const { return this->entries == 0; }
+
+template <typename E> typename BinaryTree<E>::Position root() const {
+    return Position(this->rootNode);
+}
+
+template <typename E> typename BinaryTree<E>::PositionList BinaryTree<E>::position() {
+    PositionList pl;
+    this->preorder(this->rootNode , pl);
+    return PositionList(pl);
+}
+
+template <typename E> void BinaryTree<E>::addRoot() {
+    this->rootNode = new Node();
+    this->entries = 1;
+}
+
+template <typename E> void BinaryTree<E>::expandExternal(const Position& p) {
+    Node* v = p.v;
+    v->leftChild = new Node();
+    v->leftChild->parent = v;
+    v->right = new Node();
+    v->right->parent = v;
+    this->entries += 2;
+}
+
+template <typename E> typename BinaryTree<E>::Position BinaryTree<E>::removeAboveExternal(const Position& p) {
+    Node* child = p.v;
+    Node* parentNode = child->parent;
+    Node* sibling = (parantNode->leftChild == child) ? parentNode->rightChild : parentNode->leftChild;
+
+    if(parent == this->rootNode) {
+        this->rootNode = sibling;
+        sibling->parent = nullptr;
+    }
+    else {
+        Node* grandParent = parentNode->parent;
+        if(grandParent->leftChild == parentNode) grandParent->leftChild = sibling;
+        else grandParent->rightChild = sibling;
+        sibling->parent = grandParent;
+    }
+
+    delete child;
+    delete parentNode;
+    this->entries -= 2;
+    return Position(sibling);
+}
+
+template <typename E> void BinaryTree<E>::preorder(Node* v , PositionList& pl) {
+    pl.push_back(Position(v));
+    if(v->leftChild != nullptr) {
+        preorder(v->leftChild , pl);
+    }
+    if(v->rightChild != nullptr) {
+        preorder(v->rightChild , pl);
+    }
+}*/
+
+/*#include <iostream>
+#include <list>
+
+template <typename E , typename C> class PriorityQueue {
+private:
+        std::list<E>* tempList;
+        C isLess;
+
+public:
+    PriorityQueue(const C& isLess);
+    ~PriorityQueue();
+    int size() const;
+    bool isEmpty() const;
+    void insert(const E& element);
+    const E& min() const;
+    void removeMin();
+};
+
+template <typename E , typename C> PriorityQueue<E , C>::PriorityQueue(const C& isLess) {
+    this->isLess = isLess;
+    this->tempList = new std::list<E>();
+}
+
+template <typename E , typename C> PriorityQueue<E , C>::~PriorityQueue() {
+    while(!this->isEmpty()) {
+        this->removeMin();
+    }
+
+    delete tempList;
+}
+
+template <typename E , typename C> int PriorityQueue<E , C>::size() const { return (int)this->tempList->size(); }
+template <typename E , typename C> bool PriorityQueue<E , C>::isEmpty() const { return this->tempList->empty(); }
+
+template <typename E , typename C> void PriorityQueue<E , C>::insert(const E& element) {
+    std::list<E>::iterator ptr = this->tempList->begin();
+
+    while(ptr != this->tempList->end() && !this->isLess(element , *ptr)) ++ptr;
+    this->tempList->insert(ptr , element);
+}
+
+template <typename E , typename C> const E& PriorityQueue<E , C>::min() const { return this->tempList->front(); }
+
+template <typename E , typename C> void PriorityQueue<E , C>::removeMin() {
+    if(this->isEmpty()) return;
+
+    this->tempList->pop_front();
+}*/
+
 
 /*#include <iostream>
 #include <string>
-#include <exception>
-
-#define MAX(a , b) ((a) > (b)) ? (a) : (b)
-
-class ExceptionMessage : public std::exception {
-	virtual std::string getMessage() const = 0;
-};
-
-class Exceptions : public ExceptionMessage {
-private:
-	std::string message;
-
-public:
-	Exceptions(const std::string& err) { this->message = err; }
-	virtual ~Exceptions() {}
-	std::string getMessage() const override { return this->message; }
-};
-
-class EmptyVectorException : public Exceptions {
-public:
-	EmptyVectorException(const std::string& err) : Exceptions(err) {}
-};
-
-class OutOfRangeException : public Exceptions {
-public:
-	OutOfRangeException(const std::string& err) : Exceptions(err) {}
-};
-
-template <typename E> class ExpandableArrayVector {
-private:
-	E* Vector;
-	int entries;
-	int capacity;
-
-public:
-	ExpandableArrayVector(int cap = 100);
-	~ExpandableArrayVector();
-	int size() const;
-	bool isEmpty() const;
-	const E& at(int index) const;
-	void set(int index , const E& element);
-	void insert(int index , const E& element);
-	void erase(int index);
-	void reserve(int N);
-};
-
-template <typename E> ExpandableArrayVector<E>::ExpandableArrayVector(int cap) {
-	this->capacity = cap;
-	this->entries = 0;
-	this->Vector = new E[this->capacity];
-}
-
-template <typename E> ExpandableArrayVector<E>::~ExpandableArrayVector() {
-	delete [] Vector;
-}
-
-template <typename E> int ExpandableArrayVector<E>::size() const { return this->entries; }
-template <typename E> bool ExpandableArrayVector<E>::isEmpty() const { return this->entries == 0; }
-
-template <typename E> const E& ExpandableArrayVector<E>::at(int index) const {
-	if(index < 0 || index >= capacity) throw OutOfRangeException("Index is out of bounds");
-	if(this->isEmpty()) throw EmptyVectorException("The vector is empty");
-	return this->Vector[index];
-}
-
-template <typename E> void ExpandableArrayVector<E>::set(int index , const E& element) {
-	if(index < 0 || index >= capacity) throw OutOfRangeException("Index is out of bounds");
-	this->Vector[index] = element;
-}
-
-template <typename E> void ExpandableArrayVector<E>::erase(int index) {
-	if(index < 0 || index >= capacity) throw OutOfRangeException("Index is out of bounds");
-	if(this->isEmpty()) throw EmptyVectorException("The vector is empty");
-
-	for(auto i = index + 1; i < this->entries; i++) {
-		this->Vector[i - 1] = this->Vector[i];
-	}
-	this->entries--;
-}
-
-template <typename E> void ExpandableArrayVector<E>::reserve(int N) {
-	if(this->capacity >= N) return;
-	E* clone = new E[N];
-
-	for(auto i = 0; i < this->entries; i++) {
-		clone[i] = this->Vector[i];
-	}
-
-	if(this->Vector != nullptr) delete [] Vector;
-	this->Vector = clone;
-	this->capacity = N;
-}
-
-template <typename E> void ExpandableArrayVector<E>::insert(int index , const E& element) {
-	if(index < 0) throw OutOfRangeException("Index is out of bounds");
-	if(this->entries >= this->capacity) this->reserve(MAX(1 , capacity));
-
-	for(auto i = entries - 1; i > index - 1; i--) {
-		this->Vector[i + 1] = this->Vector[i];
-	}
-
-	this->Vector[index] = element;
-	this->entries++;
-}
+#include <fstream>
+#include <sstream>
 
 int main(int argc, char const *argv[]) {
-	ExpandableArrayVector<int>* arr = new ExpandableArrayVector<int>(10);
+    std::fstream file = std::fstream("test.txt" , std::ios::in);
+    std::string line;
+    if(file.is_open()) {
+        while(std::getline(file , line)) {
+            std::istringstream parsedLine;
+            parsedLine.str(line);
 
-	for(auto i = 0; i < 11; i++) {
-		arr->insert(i , i + 1);
-	}
+            std::string* delims = new std::string[3];
+            std::string word;
+            int i = 0;
+            while(std::getline(parsedLine , word , ',')) {
+                delims[i++] = word;
+            }
 
-	for(auto i = 0; i < arr->size(); i++) {
-		std::cout << arr->at(i) << std::endl;
-	}
-
-	return 0;
+            std::cout << delims[0] << " * " << delims[1] << " * " << delims[2] << " * " << std::endl;
+        }
+    }
+    return 0;
 }*/
 
 /*#include <iostream>
+#include <vector>
+#include <iterator>
 
-template <typename E> class DoublyLinkedListIterator {
+template <typename E> class CompleteBinaryTree {
 private:
-	class Node {
-	public:
-		Node* prev;
-		Node* next;
-		E element;
-	};
+    std::vector<E> V;
 
 public:
-	class Iterator {
-	private:
-		Node* v;
-		Iterator(Node* u);
+    typedef typename std::vector<E>::iterator Position;
 
-	public:
-		~Iterator();
-		const E& operator*() const;
-		bool operator==(const Iterator& p) const;
-		bool operator!=(const Iterator& p) const;
-		Iterator& operator++();
-		Iterator& operator--();
-		friend class DoublyLinkedListIterator<E>;
-	};
-
-private:
-	Node* header;
-	Node* tailer;
-	int entries;
+protected:
+    Position pos(int i);
+    int idx(const Position& p) const;
 
 public:
-	DoublyLinkedListIterator();
-	~DoublyLinkedListIterator();
-	int size() const;
-	bool isEmpty() const;
-	Iterator begin() const;
-	Iterator end() const;
-	void insertFront(const E& element);
-	void insertBack(const E& element);
-	void insert(const Iterator& p , const E& element);
-	void eraseFront();
-	void eraseBack();
-	void erase(const Iterator& p);
+    CompleteBinaryTree();
+    int size() const;
+    Position left(const Position& p);
+    Position right(const Position& p);
+    Position parent(const Position& p);
+    bool hasLeft(const Position& p) const;
+    bool hasRight(const Position& p) const;
+    bool isRoot(const Position& p) const;
+    Position root();
+    Position last();
+    void addLast(const E& e);
+    void removeLast();
+    void swap(const Position& p , const Position& q);
 };
 
-template <typename E> DoublyLinkedListIterator<E>::Iterator::Iterator(Node* u) {
-	this->v = u;
+template <typename E> CompleteBinaryTree<E>::Comparator() : V(1) {
+    
 }
 
-template <typename E> DoublyLinkedListIterator<E>::Iterator::~Iterator() {}
-
-template <typename E> const E& DoublyLinkedListIterator<E>::Iterator::operator*() const {
-	return this->v->element;
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::pos(int i) {
+    return V.begin() + i;
 }
 
-template <typename E> bool DoublyLinkedListIterator<E>::Iterator::operator==(const Iterator& p) const {
-	return this->v == p.v;
+template <typename E> int CompleteBinaryTree<E>::idx(const Position& p) const {
+    return p - V.begin();
 }
 
-template <typename E> bool DoublyLinkedListIterator<E>::Iterator::operator!=(const Iterator& p) const {
-	return this->v != p.v;
+template <typename E> int CompleteBinaryTree<E>::size() const { return V.size() - 1; }
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::left(const Position& p) {
+    return pos(2 * idx(p));
 }
 
-template <typename E> typename DoublyLinkedListIterator<E>::Iterator& DoublyLinkedListIterator<E>::Iterator::operator++() {
-	this->v = this->v->next;
-	return *this;
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::right(const Position& p) {
+    return pos(2 * idx(p) + 1);
 }
 
-template <typename E> typename DoublyLinkedListIterator<E>::Iterator& DoublyLinkedListIterator<E>::Iterator::operator--() {
-	this->v = this->v->prev;
-	return *this;
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::parent(const Position& p) {
+    return pos(idx(p) / 2);
 }
 
-template <typename E> DoublyLinkedListIterator<E>::DoublyLinkedListIterator() {
-	this->header = new Node();
-	this->tailer = new Node();
-	this->header->next = this->tailer;
-	this->tailer->prev = this->header;
-	this->entries = 0;
+template <typename E> bool CompleteBinaryTree<E>::hasLeft(const Position& p) const {
+    return 2 * idx(p) <= this->size();
 }
 
-template <typename E> DoublyLinkedListIterator<E>::~DoublyLinkedListIterator() {
-	while(!this->isEmpty())
-		this->eraseFront();
+template <typename E> bool CompleteBinaryTree<E>::hasRight(const Position& p) const {
+    return 2 * idx(p) + 1 <= this->size();
 }
 
-template <typename E> int DoublyLinkedListIterator<E>::size() const { return this->entries; }
-template <typename E> bool DoublyLinkedListIterator<E>::isEmpty() const { return this->entries == 0; }
-
-template <typename E> typename DoublyLinkedListIterator<E>::Iterator DoublyLinkedListIterator<E>::begin() const {
-	return Iterator(this->header->next);
+template <typename E> bool CompleteBinaryTree<E>::isRoot(const Position& p) const {
+    return idx(p) == 1;
 }
 
-template <typename E> typename DoublyLinkedListIterator<E>::Iterator DoublyLinkedListIterator<E>::end() const {
-	return Iterator(this->tailer);
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::root() {
+    return pos(1);
 }
 
-template <typename E> void DoublyLinkedListIterator<E>::insertFront(const E& element) {
-	this->insert(this->begin() , element);
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::last() {
+    return pos(this->size());
 }
 
-template <typename E> void DoublyLinkedListIterator<E>::insertBack(const E& element) {
-	this->insert(this->end() , element);
+template <typename E> void CompleteBinaryTree<E>::addLast(const E& element) {
+    V.push_back(element);
 }
 
-template <typename E> void DoublyLinkedListIterator<E>::insert(const Iterator& p , const E& element) {
-	Node* successor = p.v;
-	Node* predecessor = successor->prev;
-	Node* temp = new Node();
-	temp->element = element;
-	predecessor->next = temp;
-	temp->prev = predecessor;
-	successor->prev = temp;
-	temp->next = successor;
-	this->entries++;
+template <typename E> void CompleteBinaryTree<E>::removeLast() {
+    V.pop_back();
 }
 
-template <typename E> void DoublyLinkedListIterator<E>::eraseFront() {
-	this->erase(this->begin());
-}
-
-template <typename E> void DoublyLinkedListIterator<E>::eraseBack() {
-	this->erase(--this->end());
-}
-
-template <typename E> void DoublyLinkedListIterator<E>::erase(const Iterator& p) {
-	if(this->isEmpty()) return;
-	Node* temp = p.v;
-	Node* successor = temp->next;
-	Node* predecessor = temp->prev;
-	successor->prev = predecessor;
-	predecessor->next = successor;
-	this->entries--;
-	delete temp;
-}
-
-int main(int argc, char const *argv[]) {
-	
-	DoublyLinkedListIterator<int>* arr = new DoublyLinkedListIterator<int>();
-
-	for(auto i = 0; i < 10; i++) {
-		arr->insertFront(i + 1);
-	}
-
-	DoublyLinkedListIterator<int>::Iterator ptr = arr->begin();
-
-	while(ptr != arr->end()) {
-		std::cout << *ptr << std::endl;
-		++ptr;
-	}
-
-	return 0;
+template <typename E> void CompleteBinaryTree<E>::swap(const Position& p , const Position& q) {
+    E element = *q;
+    *q = *p;
+    *p = e;
 }*/
 
 /*#include <iostream>
+#include <vector>
+#include <iterator>
 
-template <typename E> class Sequence {
+template <typename E> class CompleteBinaryTree {
 private:
-	class Node {
-	public:
-		Node* prev;
-		Node* next;
-		E element;
-	};
+    std::vector<E> V;
 
 public:
-	class Iterator {
-	private:
-		Node* v;
-		Iterator(Node* u);
+    typedef typename std::vector<E>::iterator Position;
 
-	public:
-		~Iterator();
-		const E& operator*() const;
-		bool operator==(const Iterator& p) const;
-		bool operator!=(const Iterator& p) const;
-		Iterator& operator++();
-		Iterator& operator--();
-		friend class Sequence<E>;
-	};
-
-private:
-	Node* header;
-	Node* tailer;
-	int entries;
+protected:
+    Position pos(int i);
+    int idx(const Position& p) const;
 
 public:
-	Sequence();
-	~Sequence();
-	int size() const;
-	bool isEmpty() const;
-	Iterator begin() const;
-	Iterator end() const;
-	void insertFront(const E& element);
-	void insertBack(const E& element);
-	void insert(const Iterator& p , const E& element);
-	void eraseFront();
-	void eraseBack();
-	void erase(const Iterator& p);
-	Iterator atIndex(int index) const;
-	int indexOf(const Iterator& p) const;
+    CompleteBinaryTree();
+    int size() const;
+    Position left(const Position& p);
+    Position right(const Position& p);
+    Position parent(const Position& p);
+    bool hasLeft(const Position& p) const;
+    bool hasRight(const Position& p) const;
+    bool isRoot(const Position& p);
+    Position root();
+    Position last();
+    void addLast(const E& element);
+    void removeLast();
+    void swap(const Position& p , const Position& q);
 };
 
-template <typename E> Sequence<E>::Iterator::Iterator(Node* u) {
-	this->v = u;
+template <typename E> CompleteBinaryTree<E>::CompleteBinaryTree() : V(1) {
+    
 }
 
-template <typename E> Sequence<E>::Iterator::~Iterator() {}
-
-template <typename E> const E& Sequence<E>::Iterator::operator*() const {
-	return this->v->element;
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::pos(int i) {
+    return V.begin() + i;
 }
 
-template <typename E> bool Sequence<E>::Iterator::operator==(const Iterator& p) const {
-	return this->v == p.v;
+template <typename E> int CompleteBinaryTree<E>::idx(const Position& p) const {
+    return p - V.begin();
 }
 
-template <typename E> bool Sequence<E>::Iterator::operator!=(const Iterator& p) const {
-	return this->v != p.v;
+template <typename E> int CompleteBinaryTree<E>::size() const {
+    return this->V.size() - 1;
 }
 
-template <typename E> typename Sequence<E>::Iterator& Sequence<E>::Iterator::operator++() {
-	this->v = this->v->next;
-	return *this;
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::left(const Position& p) {
+    return pos(2 * idx(p));
 }
 
-template <typename E> typename Sequence<E>::Iterator& Sequence<E>::Iterator::operator--() {
-	this->v = this->v->prev;
-	return *this;
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::right(const Position& p) {
+    return pos(2 * idx(p) + 1);
 }
 
-
-template <typename E> Sequence<E>::Sequence() {
-	this->header = new Node();
-	this->tailer = new Node();
-	this->header->next = this->tailer;
-	this->tailer->prev = this->header;
-	this->entries = 0;
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::parent(const Position& p) {
+    return pos((int)(idx(p) / 2));
 }
 
-template <typename E> Sequence<E>::~Sequence() {
-	while(!this->isEmpty()) this->eraseFront();
+template <typename E> bool CompleteBinaryTree::hasLeft(const Position& p) const {
+    return 2 * idx(p) <= size();
 }
 
-template <typename E> int Sequence<E>::size() const { return this->entries; }
-template <typename E> bool Sequence<E>::isEmpty() const { return this->entries == 0; }
-
-template <typename E> typename Sequence<E>::Iterator Sequence<E>::begin() const {
-	return Iterator(this->header->next);
+template <typename E> bool CompleteBinaryTree<E>::hasRight(const Position& p) const {
+    return 2 * idx(p) + 1 <= size();
 }
 
-template <typename E> typename Sequence<E>::Iterator Sequence<E>::end() const {
-	return Iterator(this->tailer);
+template <typename E> bool CompleteBinaryTree<E>::isRoot(const Position& p) const {
+    return idx(p) == 1;
 }
 
-template <typename E> void Sequence<E>::insertFront(const E& element) {
-	this->insert(this->begin() , element);
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::root() {
+    return pos(1);
 }
 
-template <typename E> void Sequence<E>::insertBack(const E& element) {
-	this->insert(this->end() , element);
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::last() {
+    return pos(size());
 }
 
-template <typename E> void Sequence<E>::insert(const Iterator& p , const E& element) {
-	Node* successor = p.v;
-	Node* predecessor = successor->prev;
-	Node* temp = new Node();
-	temp->element = element;
-	temp->next = successor;
-	successor->prev = temp;
-	predecessor->next = temp;
-	temp->prev = predecessor;
-	this->entries++;
+template <typename E> void CompleteBinaryTree<E>::addLast(const E& element) {
+    V.push_back(element);
 }
 
-template <typename E> void Sequence<E>::eraseFront() {
-	this->erase(this->begin());
+template <typename E> void CompleteBinaryTree<E>::removeLast() {
+    V.pop_back();
 }
 
-template <typename E> void Sequence<E>::eraseBack() {
-	this->erase(--this->end());
+template <typename E> void CompleteBinaryTree<E>::swap(const Position& p , const Position& q) {
+    E element = *q;
+    *q = *p;
+    *p = element;
 }
 
-template <typename E> void Sequence<E>::erase(const Iterator& p) {
-	if(this->isEmpty()) return;
-	Node* temp = p.v;
-	Node* predecessor = temp->prev;
-	Node* successor = temp->next;
-	this->entries--;
-	delete temp;
+template <typename E , typename C> class HeapPriorityQueue {
+private:
+    CompleteBinaryTree<E> T;
+    C isLess;
+
+private:
+    typedef typename CompleteBinaryTree<E>::Position Position;
+
+public:
+    int size() const;
+    bool isEmpty() const;
+    void insert(const E& element);
+    const E& min() const;
+    void removeMin();
+};
+
+template <typename E , typename C> int HeapPriorityQueue<E , C>::size() const {
+    return this->T.size();
 }
 
-template <typename E> typename Sequence<E>::Iterator Sequence<E>::atIndex(int index) const {
-	Iterator ptr = this->begin();
-
-	for(auto i = 1; i <= index; i++) {
-		++ptr;
-	}
-
-	return ptr;
+template <typename E , typename C> bool HeapPriorityQueue<E , C>::isEmpty() const {
+    return this->T.size() == 0;
 }
 
-template <typename E> int Sequence<E>::indexOf(const Iterator& p) const {
-	Iterator ptr = this->begin();
-	int pos = 0;
-
-	while(ptr != p) {
-		++ptr;
-		pos++;
-	}
-
-	return pos;
+template <typename E , typename C> const E& HeapPriorityQueue<E , C>::min() const {
+    return *(this->T.root());
 }
 
-int main(int argc, char const *argv[]) {
-	Sequence<int>* arr = new Sequence<int>();
+template <typename E , typename C> void HeapPriorityQueue<E , C>::insert(const E& element) {
+    this->T.addLast(element);
+    Position v = T.last();
 
-	for(auto i = 0; i < 10; i++) {
-		arr->insertFront(i + 1);
-	}
+    while(!T.isRoot(v)) {
+        Position u = T.parent(v);
+        if(!isLess(v , u)) break;
+        swap(v , u);
+        v = u;
+    }
+}
 
-	Sequence<int>::Iterator ptr = arr->begin();
+template <typename E , typename C> void HeapPriorityQueue<E , C>::removeMin() {
+    if(T.size() == 1) {
+        T.removeLast();
+    }
+    else {
+        T.swap(T.root() , T.last());
+        T.removeLast();
+        Position u = T.root();
 
-	while(ptr != arr->end()) {
-		auto index = arr->indexOf(ptr);
-		std::cout << "arr[" << index << "]: " << *(arr->atIndex(index)) << std::endl;
-		++ptr;
-	}
-
-	return 0;
+        while(T.hasLeft(u)) {
+            Position v = T.left(u);
+            if(T.hasRight(u) && isLess(*(T.right()) , *v)) {
+                v = T.right();
+            }
+            if(isLess(*v , *u)) {
+                T.swap(u , v);
+                u = v;
+            }
+            else {
+                break;
+            }
+        }
+    }
 }*/
 
 /*#include <iostream>
+#include <vector>
+#include <iterator>
 
-template <typename E> class Sequence {
+template <typename E> class CompleteBinaryTree {
 private:
-	class Node {
-	public:
-		Node* prev;
-		Node* next;
-		E element;
-	};
+    std::vector<E> V;
 
 public:
-	class Iterator {
-	private:
-		Node* v;
-		Iterator(Node* u);
+    typedef typename std::vector<E>::iterator Position;
 
-	public:
-		~Iterator();
-		const E& operator*() const;
-		bool operator==(const Iterator& p) const;
-		bool operator!=(const Iterator& p) const;
-		Iterator& operator++();
-		Iterator& operator--();
-		friend class Sequence<E>;
-	};
-
-private:
-	Node* header;
-	Node* tailer;
-	int entries;
+protected:
+    Position pos(int i);
+    int idx(const Position& p) const;
 
 public:
-	Sequence();
-	~Sequence();
-	int size() const;
-	bool isEmpty() const;
-	Iterator begin() const;
-	Iterator end() const;
-	void insertFront(const E& element);
-	void insertBack(const E& element);
-	void insert(const Iterator& p , const E& element);
-	void eraseFront();
-	void eraseBack();
-	void erase(const Iterator& p);
-	Iterator atIndex(int index) const;
-	int indexOf(const Iterator& p) const;
+    CompleteBinaryTree();
+    int size() const;
+    bool isEmpty() const;
+    Position left(const Position& p);
+    Position right(const Position& p);
+    Position parent(const Position& p);
+    bool hasLeft(const Position& p) const;
+    bool hasRight(const Position& p) const;
+    bool isRoot(const Position& p) const;
+    bool root();
+    bool last();
+    void addLast(const E& element);
+    void removeLast();
+    void swap(const Position& p , const Position& q);
 };
 
-template <typename E> Sequence<E>::Iterator::Iterator(Node* u) {
-	this->v = u;
+template <typename E> CompleteBinaryTree<E>::CompleteBinaryTree() : V(1) {
+    
 }
 
-template <typename E> Sequence<E>::Iterator::~Iterator() {}
-
-template <typename E> const E& Sequence<E>::Iterator::operator*() const {
-	return this->v->element;
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::pos(int i) {
+    return this->V.begin() + i;
 }
 
-template <typename E> bool Sequence<E>::Iterator::operator==(const Iterator& p) const {
-	return this->v == p.v;
+template <typename E> int CompleteBinaryTree<E>::idx(const Position& p) const {
+    return p - this->V.begin();
 }
 
-template <typename E> bool Sequence<E>::Iterator::operator!=(const Iterator& p) const {
-	return this->v != p.v;
+template <typename E> int CompleteBinaryTree<E>::size() const { return this->V.size() - 1; }
+template <typename E> bool CompleteBinaryTree<E>::isEmpty() const { return this->size() == 0; }
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::left(const Position& p) {
+    return this->pos(2 * this->idx(p));
 }
 
-template <typename E> typename Sequence<E>::Iterator& Sequence<E>::Iterator::operator++() {
-	this->v = this->v->next;
-	return *this;
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::right(const Position& p) {
+    return this->pos(2 * this->idx(p) + 1);
 }
 
-template <typename E> typename Sequence<E>::Iterator& Sequence<E>::Iterator::operator--() {
-	this->v = this->v->prev;
-	return *this;
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::parent(const Position& p) {
+    return this->pos(this->idx(p) / 2);
 }
 
-template <typename E> Sequence<E>::Sequence() {
-	this->header = new Node();
-	this->tailer = new Node();
-	this->header->next = this->tailer;
-	this->tailer->prev = this->header;
-	this->entries = 0;
+template <typename E> bool CompleteBinaryTree<E>::hasLeft(const Position& p) const {
+    return 2 * this->idx(p) <= this->size();
 }
 
-template <typename E> Sequence<E>::~Sequence() {
-	while(!this->isEmpty()) this->eraseFront();
+template <typename E> bool CompleteBinaryTree<E>::hasRight(const Position& p) const {
+    return 2 * this->idx(p) + 1 <= this->size();
 }
 
-template <typename E> int Sequence<E>::size() const { return this->entries; }
-template <typename E> bool Sequence<E>::isEmpty() const { return this->entries == 0; }
-
-template <typename E> typename Sequence<E>::Iterator Sequence<E>::begin() const {
-	return Iterator(this->header->next);
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::root() {
+    return this->pos(1);
 }
 
-template <typename E> typename Sequence<E>::Iterator Sequence<E>::end() const {
-	return Iterator(this->tailer);
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::last() {
+    return this->pos(this->size());
 }
 
-template <typename E> void Sequence<E>::insertFront(const E& element) {
-	this->insert(this->begin() , element);
+template <typename E> void CompleteBinaryTree<E>::addLast(const E& element) {
+    this->V.push_back(element);
 }
 
-template <typename E> void Sequence<E>::insertBack(const E& element) {
-	this->insert(this->end() , element);
+template <typename E> void CompleteBinaryTree<E>::removeLast() {
+    this->V.pop_back();
 }
 
-template <typename E> void  Sequence<E>::insert(const Iterator& p , const E& element) {
-	Node* successor = p.v;
-	Node* predecessor = successor->prev;
-	Node* temp = new Node();
-	temp->element = element;
-	temp->next = successor;
-	successor->prev = temp;
-	temp->prev = predecessor;
-	predecessor->next = temp;
-	this->entries++;
-}
-
-template <typename E> void Sequence<E>::eraseFront() {
-	this->erase(this->begin());
-}
-
-template <typename E> void Sequence<E>::eraseBack() {
-	this->erase(--this->end());
-}
-
-template <typename E> void Sequence<E>::erase(const Iterator& p) {
-	Node* temp = p.v;
-	Node* predecessor = temp->prev;
-	Node* successor = temp->next;
-	predecessor->next = successor;
-	successor->prev = predecessor;
-	this->entries--;
-	delete temp;
-}
-
-template <typename E> typename Sequence<E>::Iterator Sequence<E>::atIndex(int index) const {
-	Iterator ptr = this->begin();
-
-	for(auto i = 0; i < index; i++) {
-		++ptr;
-	}
-
-	return ptr;
-}
-
-template <typename E> int Sequence<E>::indexOf(const Iterator& p) const {
-	Iterator ptr = this->begin();
-	auto pos = 0;
-
-	while(ptr != this->end()) {
-		++ptr;
-		pos++;
-	}
-
-	return pos;
-}
-
-void bubbleSortMethodI(Sequence<int>* arr) {
-	for(auto i = 0; i < arr->size(); i++) {
-
-		bool isSwaped = false;
-
-		for(auto j = 1; j < arr->size() - i; j++) {
-			Sequence<int>::Iterator predecessor = arr->atIndex(j - 1);
-			Sequence<int>::Iterator successor = arr->atIndex(j);
-
-			if(*predecessor > *successor) {
-				auto temp = *predecessor;
-				*predecessor = *successor;
-				*successor = temp;
-			}
-		}
-
-		if(!isSwaped) {
-			return;
-		}
-	}
-}
-
-void bubbleSortMethodII(Sequence<int>* arr) {
-	for(auto i = 0; i < arr->size(); i++) {
-
-		bool isSwaped = false;
-		Sequence<int>::Iterator predecessor = arr->begin();
-
-		for(auto j = 1; j < arr->size() - i; j++) {
-			Sequence<int>::Iterator successor = predecessor;
-			++successor;
-
-			if(*predecessor > *successor) {
-				int temp = *predecessor;
-				*predecessor = *successor;
-				*successor = temp;
-			}
-
-			++predecessor;
-		}
-
-		if(!isSwaped) {
-			return;
-		}
-	}
-}
-
-int main(int argc, char const *argv[]) {
-	int temp[10] = { 5 , 3 , 9 , 1 , 4 , 10 , 2 , 8 , 6 , 7 };
-
-	Sequence<int>* arr = new Sequence<int>();
-
-	for(auto i = 0; i < 10; i++) {
-		arr->insertFront(temp[i]);
-	}
-
-	bubbleSortMethodI(arr);
-
-	Sequence<int>::Iterator ptr = arr->begin();
-
-	while(ptr != arr->end()) {
-		std::cout << *ptr << std::endl;
-	}
-
-
-	return 0;
+template <typename E> void CompleteBinaryTree<E>::swap(const Position& p , const Position& q) {
+    E temp = *p;
+    *p = *q;
+    *q = temp;
 }*/
 
 /*#include <iostream>
+#include <vector>
+#include <iterator>
+
+template <typename E> class CompleteBinaryTree {
+private:
+    std::vector<E> V;
+
+public:
+    typedef typename std::vector<E>::iterator Position;
+
+protected:
+    Position pos(int i);
+    int idx(const Position& p) const;
+
+public:
+    CompleteBinaryTree();
+    int size() const;
+    Position left(const Position& p);
+    Position right(const Position& p);
+    Position parent(const Position& p);
+    bool hasLeft(const Position& p) const;
+    bool hasRight(const Position& p) const;
+    bool isRoot(const Position& p) const;
+    Position root();
+    Position last();
+    void addLast(const E& element);
+    void removeLast();
+    void swap(const Position& p , const Position& q);
+};
+
+template <typename E> CompleteBinaryTree<E>::CompleteBinaryTree() : V(1) {
+    
+}
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::pos(int i) {
+    return this->V.begin() + i;
+}
+
+template <typename E> int CompleteBinaryTree<E>::idx(const Position& p) const {
+    return p - this->V.begin();
+}
+
+template <typename E> int CompleteBinaryTree<E>::size() const {
+    return this->V.size() - 1;
+}
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::left(const Position& p) {
+    return this->pos(2 * this->idx(p));
+}
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::right(const Position& p) {
+    return this->pos(2 * this->idx(p) + 1);
+}
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::parent(const Position& p) {
+    return this->pos((int)(this->idx(p) / 2));
+}
+
+template <typename E> bool CompleteBinaryTree<E>::hasLeft(const Position& p) const {
+    return 2 * this->idx(p) <= this->size();
+}
+
+template <typename E> bool CompleteBinaryTree<E>::hasRight(const Position& p) const {
+    return 2 * this->idx(p) + 1 <= this->size();
+}
+
+template <typename E> bool CompleteBinaryTree<E>::isRoot(const Position& p) const {
+    return this->idx(p) == 1;
+}
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::root() {
+    return this->pos(1);
+}
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::last() {
+    return this->pos(this->size());
+}
+
+template <typename E> void CompleteBinaryTree<E>::addLast(const E& element) {
+    this->V.push_back(element);
+}
+
+template <typename E> void CompleteBinaryTree<E>::removeLast() {
+    this->V.pop_back();
+}
+
+template <typename E> void CompleteBinaryTree<E>::swap(const Position& p , const Position& q) {
+    E temp = *p;
+    *p = *q;
+    *q = temp;
+}
+
+template <typename E , typename C> class HeapPriorityQueue {
+private:
+    CompleteBinaryTree<E> T;
+    C isLess;
+    typedef typename CompleteBinaryTree<E>::Position Position;
+
+public:
+    HeapPriorityQueue(const C& isLess);
+    int size() const;
+    bool isEmpty() const;
+    void insert(const E& element);
+    const E& min();
+    void removeMin();
+};
+
+template <typename E , typename C> HeapPriorityQueue<E , C>::HeapPriorityQueue(const C& isLess) {
+    this->isLess = isLess;
+}
+
+template <typename E , typename C> int HeapPriorityQueue<E , C>::size() const {
+    return this->T.size();
+}
+
+template <typename E , typename C> bool HeapPriorityQueue<E , C>::isEmpty() const {
+    return this->size() == 0;
+}
+
+template <typename E , typename C> const E& HeapPriorityQueue<E , C>::min() {
+    return *(T.root());
+}
+
+template <typename E , typename C> void HeapPriorityQueue<E , C>::insert(const E& element) {
+    this->T.addLast(element);
+    Position v = T.last();
+
+    while(!T.isRoot(v)) {
+        Position u = T.parent(v);
+
+        if(!isLess(*v , *u)) break;
+        T.swap(v , u);
+        v = u;
+    }
+}
+
+template <typename E , typename C> void HeapPriorityQueue<E , C>::removeMin() {
+    if(this->size() == 1) {
+        this->T.removeLast();
+    }
+    else {
+        T.swap(this->T.root() , this->T.last());
+        this->T.removeLast();
+        Position u = this->T.root();
+
+        while(this->T.hasLeft(u)) {
+            Position v = this->T.left(u);
+
+            if(this->T.hasRight(u) && *(this->T.right(u)) < *v) {
+                v = this->T.right(u);
+            }
+
+            if(isLess(*v , *u)) {
+                this->T.swap(u , v);
+                u = v;
+            }
+            else {
+                break;
+            }
+        }
+    }
+}
+
+template <typename E> class IsLess {
+public:
+    bool operator()(const E& a , const E& b) {
+        return a < b;
+    }
+};
 
 int main(int argc, char const *argv[]) {
-	int a = 10;
-	// int* ptr = &a;
+    IsLess<int> isLess;
+    HeapPriorityQueue<int , IsLess<int>> heap = HeapPriorityQueue<int , IsLess<int>>(isLess);
 
-	int& ref = a;
+    int arr[] = { 10 , 3 , 5 , 2 , 8 , 9 , 4 , 7 , 6 , 1 };
 
-	int* b = &ref;
+    for(auto i = 0; i < 10; i++) {
+        heap.insert(arr[i]);
+        std::cout << heap.min() << " ";
+    }
 
-	std::cout << *b << std::endl;
+    std::cout << std::endl;
 
-	return 0;
+    for(auto i = 0; i < 10; i++) {
+        auto temp = heap.min();
+        arr[i] = temp;
+        heap.removeMin();
+    }
+
+    for(auto i = 0; i < 10; i++) {
+        std::cout << arr[i] << " ";
+    }
+
+    std::cout << std::endl;
+
+
+    return 0;
 }*/
 
 /*#include <iostream>
-#include <string>
+#include <vector>
+#include <iterator>
 
-class Entity {
-public:
-	//pure virtual function
-	virtual std::string getName() = 0;
-};
-
-class Player : public Entity {
+template <typename E> class CompleteBinaryTree {
 private:
-	std::string m_Name;
+    std::vector<E> V;
 
 public:
-	Player(const std::string& name) : m_Name(name) {
+    typedef typename std::vector<E>::iterator Position;
 
-	}
+protected:
+    Position pos(int i);
+    int idx(const Position& p) const;
 
-	std::string getName() override { return this->m_Name; }
+public:
+    CompleteBinaryTree();
+    int size() const;
+    Position left(const Position& p);
+    Position right(const Position& p);
+    Position parent(const Position& p);
+    bool hasLeft(const Position& p) const;
+    bool hasRight(const Position& p) const;
+    bool isRoot(const Position& p) const;
+    Position root();
+    Position last();
+    void addLast(const E& element);
+    void removeLast();
+    void swap(const Position& p , const Position& q);
 };
 
-void printName(Entity* ptr) {
-	std::cout << ptr->getName() << std::endl;
+template <typename E> CompleteBinaryTree<E>::CompleteBinaryTree() : V(1) {
+    
 }
 
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::pos(int i) {
+    return V.begin() + i;
+}
+
+template <typename E> int CompleteBinaryTree<E>::idx(const Position& p) const {
+    return p - V.begin();
+}
+
+template <typename E> int CompleteBinaryTree<E>::size() const {
+    return this->V.size() - 1;
+}
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::left(const Position& p) {
+    return this->pos(2 * this->idx(p));
+}
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::right(const Position& p) {
+    return this->pos(2 * this->idx(p) + 1);
+}
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::parent(const Position& p) {
+    return this->pos((int)(this->idx(p) / 2));
+}
+
+template <typename E> bool CompleteBinaryTree<E>::hasLeft(const Position& p) const {
+    return 2 * this->idx(p) <= this->size();
+}
+
+template <typename E> bool CompleteBinaryTree<E>::hasRight(const Position& p) const {
+    return 2 * this->idx(p) + 1 <= this->size();
+}
+
+template <typename E> bool CompleteBinaryTree<E>::isRoot(const Position& p) const {
+    return this->idx(p) == 1;
+}
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::root() {
+    return this->pos(1);
+}
+
+template <typename E> typename CompleteBinaryTree<E>::Position CompleteBinaryTree<E>::last() {
+    return this->pos(this->size());
+}
+
+template <typename E> void CompleteBinaryTree<E>::addLast(const E& element) {
+    this->V.push_back(element);
+}
+
+template <typename E> void CompleteBinaryTree<E>::removeLast() {
+    this->V.pop_back();
+}
+
+template <typename E> void CompleteBinaryTree<E>::swap(const Position& p , const Position& q) {
+    E temp = *p;
+    *p = *q;
+    *q = temp;
+}
+
+template <typename E , typename C> class MaxHeap {
+private:
+    CompleteBinaryTree<E> T;
+    C isLess;
+
+public:
+    typedef typename CompleteBinaryTree<E>::Position Position;
+
+public:
+    MaxHeap(C isLess);
+    int size() const;
+    bool isEmpty() const;
+    const E& max();
+    void insert(const E& element);
+    void removeMax();
+};
+
+template <typename E , typename C> MaxHeap<E , C>::MaxHeap(C isLess) {
+    this->isLess = isLess;
+}
+
+template <typename E ,typename C> int MaxHeap<E , C>::size() const {
+    return this->T.size();
+}
+
+template <typename E , typename C> bool MaxHeap<E , C>::isEmpty() const {
+    return T.size() == 0;
+}
+
+template <typename E , typename C> const E& MaxHeap<E , C>::max() {
+    return *(this->T.root());
+}
+
+template <typename E , typename C> void MaxHeap<E , C>::insert(const E& element) {
+    this->T.addLast(element);
+    Position v = this->T.last();
+
+    while(!T.isRoot(v)) {
+        Position u = this->T.parent(v);
+
+        if(!isLess(*u , *v)) break;
+        this->T.swap(u , v);
+        v = u;
+    }
+}
+
+template <typename E , typename C> void MaxHeap<E , C>::removeMax() {
+    if(this->size() == 1) {
+        this->T.removeLast();
+    }
+    else {
+        this->T.swap(this->T.root() , this->T.last());
+        this->T.removeLast();
+        Position u = this->T.root();
+
+        while(this->T.hasLeft(u)) {
+            Position v = this->T.left(u);
+
+            if(this->T.hasRight(u) && !isLess(*(this->T.right(u)) , *v)) {
+                v = this->T.right(u);
+            }
+
+            if(isLess(*u , *v)) {
+                this->T.swap(u , v);
+                u = v;
+            }
+            else {
+                break;
+            }
+        }
+    }
+}
+
+template <typename E> class IsLess {
+public:
+    bool operator()(const E& a , const E& b) const {
+        return a < b;
+    }
+};
+
 int main(int argc, char const *argv[]) {
-	
-	Entity* e = new Entity();
-	printName(e);
+    IsLess<int> isLess;
+    MaxHeap<int , IsLess<int>> heap = MaxHeap<int , IsLess<int>>(isLess);
 
-	Player* p = new Player("d3cod3monk");
-	printName(p);
+    int arr[] = { 10 , 3 , 5 , 2 , 8 , 9 , 4 , 7 , 6 , 1 };
 
+    for(auto i = 0; i < 10; i++) {
+        heap.insert(arr[i]);
+        std::cout << heap.max() << " ";
+    }
 
-	return 0;
+    std::cout << std::endl;
+
+    for(auto i = 0; i < 10; i++) {
+        auto temp = heap.max();
+        arr[10 - i - 1] = temp;
+        heap.removeMax();
+    }
+
+    for(auto i = 0; i < 10; i++) {
+        std::cout << arr[i] << " ";
+    }
+
+    std::cout << std::endl;
+
+    return 0;
 }*/

@@ -6,6 +6,7 @@
 		"fwrite",
 		"getline",
 		"iostream",
+		"Mutex",
 		"perror",
 		"printf",
 		"scanf",
